@@ -6,19 +6,26 @@ class WriteImgUploadPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Align(
+        title: const Align(
           alignment: Alignment.centerLeft,
           child: Text(
             "새 게시물",
           ),
         ),
         leading: IconButton(
-            onPressed: () {},
-            //TODO 아이콘에 가로세로 50 씩 크기 주기
-            icon: Icon(
-              Icons.close,
-              size: 40,
-            )),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          padding: const EdgeInsets.all(0), // 패딩 제거
+          icon: const Icon(
+            Icons.close,
+            size: 40, // 아이콘 크기
+          ),
+          constraints: const BoxConstraints(
+            minWidth: 50, // 가로 크기
+            minHeight: 50, // 세로 크기
+          ),
+        ),
         actions: [
           GestureDetector(
             onTap: () {
@@ -29,8 +36,8 @@ class WriteImgUploadPage extends StatelessWidget {
                 ),
               );
             },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 20, top: 10),
+            child: const Padding(
+              padding: EdgeInsets.only(right: 20, top: 10),
               child: Text(
                 "다음",
                 style: TextStyle(
