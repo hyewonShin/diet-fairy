@@ -1,3 +1,7 @@
+import 'package:diet_fairy/presentation/write/widgets/bottom_btn.dart';
+import 'package:diet_fairy/presentation/write/widgets/contents_box.dart';
+import 'package:diet_fairy/presentation/write/widgets/img_upload_appbar.dart';
+import 'package:diet_fairy/presentation/write/widgets/tag_box.dart';
 import 'package:flutter/material.dart';
 
 class WritePage extends StatefulWidget {
@@ -20,108 +24,39 @@ class _WritePageState extends State<WritePage> {
 
   @override
   Widget build(BuildContext context) {
+    // 화면의 전체 높이 가져오기
+    final double screenHeight = MediaQuery.of(context).size.height;
+    // 하단 버튼 padding
+    final bottomPadding =
+        MediaQuery.of(context).size.height > 600 ? 40.0 : 24.0;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "새 게시물",
-          ),
+      appBar: writePageAppbar(true, context),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: screenHeight / 2.5,
+              width: double.infinity,
+              child: Image.network(
+                'https://picsum.photos/400',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  contentsBox(_contentController, screenHeight),
+                  tagBox(_tagController),
+                ],
+              ),
+            ),
+          ],
         ),
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              size: 40,
-            )),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 400,
-            width: double.infinity,
-            child: Image.network(
-              'https://picsum.photos/400',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 13, vertical: 5),
-                    child: TextField(
-                      controller: _contentController,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none, hintText: '문구 추가...'),
-                      keyboardType: TextInputType.multiline, // 다중 줄 입력 지원
-                      maxLines: null,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 13, vertical: 5),
-                      child: TextField(
-                        controller: _tagController,
-                        decoration: const InputDecoration(
-                            border: InputBorder.none, hintText: '태그 추가...'),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      print('Button Pressed!');
-                      print(_contentController.text);
-                      print(_tagController.text);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue, // 배경 색상
-                      shadowColor: Colors.black, // 그림자 색상
-                      elevation: 5, // 그림자 높이
-                      shape: RoundedRectangleBorder(
-                        // 버튼 모양
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 13),
-                    ),
-                    child: const Text(
-                      '공유',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ), // 텍스트 스타일
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Spacer()
-        ],
-      ),
+      bottomNavigationBar:
+          bottomBtn(_contentController, _tagController, bottomPadding),
     );
   }
 }
