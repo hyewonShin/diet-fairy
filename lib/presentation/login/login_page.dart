@@ -1,3 +1,4 @@
+import 'package:diet_fairy/presentation/home/home_page.dart';
 import 'package:diet_fairy/presentation/widgets/id_text_field.dart';
 import 'package:diet_fairy/presentation/widgets/pw_text_field.dart';
 import 'package:flutter/material.dart';
@@ -46,13 +47,15 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
-                          Navigator.push(
+                          Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return LoginPage();
+                                return HomePage();
                               },
                             ),
+                            // HomePage 로 넘어갈 때 이전 stack 에 쌓인 모든 페이지 지움
+                            (route) => false,
                           );
                         }
                       },
