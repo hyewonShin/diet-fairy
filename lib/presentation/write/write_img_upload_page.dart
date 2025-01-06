@@ -1,64 +1,66 @@
-import 'package:diet_fairy/presentation/write/write_page.dart';
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-class WriteImgUploadPage extends StatelessWidget {
+import 'package:diet_fairy/presentation/write/widgets/img_upload_appbar.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+class WriteImgUploadPage extends StatefulWidget {
+  const WriteImgUploadPage({super.key});
+
+  @override
+  State<WriteImgUploadPage> createState() => _WriteImgUploadPageState();
+}
+
+class _WriteImgUploadPageState extends State<WriteImgUploadPage> {
+  final ImagePicker _picker = ImagePicker();
+  File? _image;
+
+  // 갤러리에서 이미지 선택
+  Future<void> _pickImageFromGallery() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path); // 이미지 경로로 File 객체 생성
+      });
+    }
+  }
+
+  // 카메라로 이미지 촬영
+  Future<void> _pickImageFromCamera() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: const Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "새 게시물",
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          padding: const EdgeInsets.all(0), // 패딩 제거
-          icon: const Icon(
-            Icons.close,
-            size: 40, // 아이콘 크기
-          ),
-          constraints: const BoxConstraints(
-            minWidth: 50, // 가로 크기
-            minHeight: 50, // 세로 크기
-          ),
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => WritePage(),
-                ),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(right: 20, top: 10),
-              child: Text(
-                "다음",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Color(0xFF54A6FF)),
-              ),
-            ),
-          ),
-        ],
-      ),
+      appBar: imgUploadAppbar(context),
       body: Column(
         children: [
-          Container(
-            height: 400,
-            width: double.infinity,
-            child: Image.network(
-              'https://picsum.photos/400',
-              fit: BoxFit.cover,
+          GestureDetector(
+            onTap: () {
+              _pickImageFromGallery();
+            },
+            child: SizedBox(
+              height: screenHeight / 2.5,
+              width: double.infinity,
+              child: _image == null
+                  ? const Text('이미지를 선택해주세요')
+                  : Image.file(
+                      _image!,
+                      width: 300,
+                      height: 300,
+                    ),
             ),
-          )
+          ),
         ],
       ),
     );
