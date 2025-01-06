@@ -26,7 +26,7 @@ class CommentItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  comment.userId,
+                  comment.userNickname,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,

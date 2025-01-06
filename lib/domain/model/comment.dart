@@ -1,13 +1,15 @@
 class Comment {
-  final String id;
+  final int commentId;
+  final String userId;
+  final String userNickname;
   final String content;
   final DateTime createdAt;
-  final String userId;
 
   Comment({
-    required this.id,
+    required this.commentId,
+    required this.userId,
+    required this.userNickname,
     required this.content,
     required this.createdAt,
-    required this.userId,
   });
 }

@@ -16,16 +16,18 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
   // 댓글 목록을 저장할 상태 변수
   final List<Comment> comments = [
     Comment(
-      id: '3378',
+      commentId: 3378,
+      userId: 'user_3378',
+      userNickname: '익명의 다이어터3378',
       content: '너무너무 맛있어 보여요😋',
       createdAt: DateTime(2025, 1, 3),
-      userId: '익명의 다이어터3378',
     ),
     Comment(
-      id: '3379',
+      commentId: 3379,
+      userId: 'user_3379',
+      userNickname: '익명의 다이어터3379',
       content: '꿀팁 감사해요><',
       createdAt: DateTime(2025, 1, 3),
-      userId: '익명의 다이어터3379',
     ),
   ];
 
