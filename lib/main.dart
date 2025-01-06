@@ -1,4 +1,5 @@
 import 'package:diet_fairy/presentation/home/home_page.dart';
+import 'package:diet_fairy/them.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,10 +14,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Diet Fairy',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const HomePage(),
+      theme: theme,
+      home: HomePage(),
     );
   }
 }
