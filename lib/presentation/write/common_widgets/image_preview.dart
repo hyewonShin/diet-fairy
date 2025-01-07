@@ -16,7 +16,7 @@ class ImagePreview extends StatelessWidget {
       future: image.file,
       builder: (context, snapshot) {
         return Container(
-          height: screenHeight / 2,
+          height: screenHeight / 2.5,
           width: double.infinity,
           decoration: const BoxDecoration(color: Colors.white),
           child: snapshot.connectionState == ConnectionState.waiting

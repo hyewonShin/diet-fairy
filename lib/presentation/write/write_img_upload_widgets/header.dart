@@ -1,4 +1,4 @@
-import 'package:diet_fairy/presentation/write_img_upload/widgets/icons.dart';
+import 'package:diet_fairy/presentation/write/write_img_upload_widgets/icons.dart';
 import 'package:flutter/material.dart';
 
 Widget header() {

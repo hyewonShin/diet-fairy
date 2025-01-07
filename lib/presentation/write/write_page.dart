@@ -1,13 +1,14 @@
-import 'package:diet_fairy/presentation/write/widgets/bottom_btn.dart';
-import 'package:diet_fairy/presentation/write/widgets/contents_box.dart';
-import 'package:diet_fairy/presentation/write/widgets/img_container.dart';
-import 'package:diet_fairy/presentation/write_img_upload/upload_controller.dart';
-import 'package:diet_fairy/presentation/write_img_upload/widgets/img_upload_appbar.dart';
-import 'package:diet_fairy/presentation/write/widgets/tag_box.dart';
+import 'package:diet_fairy/presentation/write/write_page_widgets/bottom_btn.dart';
+import 'package:diet_fairy/presentation/write/write_page_widgets/contents_box.dart';
+import 'package:diet_fairy/presentation/write/common_widgets/img_container.dart';
+import 'package:diet_fairy/presentation/write/upload_controller.dart';
+import 'package:diet_fairy/presentation/write/common_widgets/write_page_appbar.dart';
+import 'package:diet_fairy/presentation/write/write_page_widgets/tag_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:photo_manager/photo_manager.dart';
+
+// Feed 엔티티 사용하여 데이터 맞춰서 firebase에 전송 해주기
 
 class WritePage extends StatefulWidget {
   final AssetEntity? image;
@@ -39,7 +40,7 @@ class _WritePageState extends State<WritePage> {
         MediaQuery.of(context).size.height > 600 ? 40.0 : 24.0;
 
     return Scaffold(
-      appBar: writePageAppbar(true, context),
+      appBar: writePageAppbar(context: context, appBarFlag: false),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -48,7 +49,9 @@ class _WritePageState extends State<WritePage> {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  contentsBox(_contentController, screenHeight),
+                  contentsBox(
+                      contentController: _contentController,
+                      screenHeight: screenHeight),
                   tagBox(_tagController),
                 ],
               ),
@@ -56,8 +59,11 @@ class _WritePageState extends State<WritePage> {
           ],
         ),
       ),
-      bottomNavigationBar:
-          bottomBtn(_contentController, _tagController, bottomPadding),
+      bottomNavigationBar: bottomBtn(
+          context: context,
+          contentController: _contentController,
+          tagController: _tagController,
+          bottomPadding: bottomPadding),
     );
   }
 }

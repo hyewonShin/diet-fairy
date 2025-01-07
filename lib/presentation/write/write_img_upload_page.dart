@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:diet_fairy/presentation/write/widgets/img_container.dart';
-import 'package:diet_fairy/presentation/write_img_upload/upload_controller.dart';
-import 'package:diet_fairy/presentation/write_img_upload/widgets/header.dart';
-import 'package:diet_fairy/presentation/write_img_upload/widgets/img_upload_appbar.dart';
+import 'package:diet_fairy/presentation/write/common_widgets/img_container.dart';
+import 'package:diet_fairy/presentation/write/upload_controller.dart';
+import 'package:diet_fairy/presentation/write/write_img_upload_widgets/header.dart';
+import 'package:diet_fairy/presentation/write/common_widgets/write_page_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,8 +18,10 @@ class UploadPage extends StatelessWidget {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: imgUploadAppbar(
-          context: context, image: controller.selectedImage.value),
+      appBar: writePageAppbar(
+          context: context,
+          appBarFlag: true,
+          image: controller.selectedImage.value),
       body: Column(
         children: [
           // 이미지 미리보기
@@ -53,6 +55,7 @@ class UploadPage extends StatelessWidget {
                             fit: BoxFit.cover,
                           );
                         }
+                        // FutureBuilder에서 파일이 없거나 snapshot.data가 null일 때 아무런 UI를 표시하지 않도록 설정
                         return const SizedBox.shrink();
                       },
                     ),
