@@ -1,19 +1,17 @@
 import 'package:diet_fairy/presentation/write/write_page_widgets/bottom_btn.dart';
 import 'package:diet_fairy/presentation/write/write_page_widgets/contents_box.dart';
 import 'package:diet_fairy/presentation/write/common_widgets/img_container.dart';
-import 'package:diet_fairy/presentation/write/upload_controller.dart';
 import 'package:diet_fairy/presentation/write/common_widgets/write_page_appbar.dart';
 import 'package:diet_fairy/presentation/write/write_page_widgets/tag_box.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 // Feed 엔티티 사용하여 데이터 맞춰서 firebase에 전송 해주기
 
 class WritePage extends StatefulWidget {
-  final AssetEntity? image;
+  final AssetEntity? selectedImage;
 
-  const WritePage({required this.image, super.key});
+  const WritePage({required this.selectedImage, super.key});
 
   @override
   State<WritePage> createState() => _WritePageState();
@@ -32,7 +30,6 @@ class _WritePageState extends State<WritePage> {
 
   @override
   Widget build(BuildContext context) {
-    final UploadController controller = Get.put(UploadController());
     // 화면의 전체 높이 가져오기
     final double screenHeight = MediaQuery.of(context).size.height;
     // 하단 버튼 padding
@@ -45,7 +42,7 @@ class _WritePageState extends State<WritePage> {
         child: Column(
           children: [
             imgContainer(
-              controller: controller,
+              selectedImage: widget.selectedImage,
               screenHeight: screenHeight,
             ),
             Padding(
