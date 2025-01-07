@@ -10,11 +10,8 @@ class PwTextField extends StatelessWidget {
       controller: pwController,
       // 비밀번호 숨김
       obscureText: true,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: '비밀번호를 입력해주세요',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
       ),
       validator: (value) {
         if (value?.trim().isEmpty ?? true) {

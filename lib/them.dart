@@ -13,4 +13,14 @@ final theme = ThemeData(
     onSurface: Colors.black, // Surface 위의 텍스트 색상
   ),
   scaffoldBackgroundColor: const Color(0xFFF6F5F5),
+  inputDecorationTheme: InputDecorationTheme(
+    hintStyle: const TextStyle(
+      color: Colors.grey,
+    ),
+    outlineBorder: const BorderSide(color: Colors.grey),
+    border: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.grey),
+      borderRadius: BorderRadius.circular(10),
+    ),
+  ),
 );
