@@ -44,7 +44,10 @@ class _WritePageState extends State<WritePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            imgContainer(controller, screenHeight),
+            imgContainer(
+              controller: controller,
+              screenHeight: screenHeight,
+            ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(

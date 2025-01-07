@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class ImagePreview extends StatelessWidget {
-  final AssetEntity image;
+  final AssetEntity? image;
   final double screenHeight;
 
   const ImagePreview(
@@ -13,7 +13,8 @@ class ImagePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<File?>(
-      future: image.file,
+      future: image!.file,
+      // snapshot : Future의 상태 및 결과를 나타냄
       builder: (context, snapshot) {
         return Container(
           height: screenHeight / 2.5,

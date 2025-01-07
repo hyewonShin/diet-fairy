@@ -25,7 +25,10 @@ class UploadPage extends StatelessWidget {
       body: Column(
         children: [
           // 이미지 미리보기
-          imgContainer(controller, screenHeight),
+          imgContainer(
+            controller: controller,
+            screenHeight: screenHeight,
+          ),
           header(),
           // 이미지 리스트
           Expanded(
