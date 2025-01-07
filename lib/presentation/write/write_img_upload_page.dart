@@ -5,6 +5,7 @@ import 'package:diet_fairy/presentation/write/write_img_upload_widgets/header.da
 import 'package:diet_fairy/presentation/write/common_widgets/write_page_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 class UploadPage extends StatelessWidget {
   const UploadPage({super.key});
@@ -50,7 +51,7 @@ class UploadPage extends StatelessWidget {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
+                          return Lottie.asset('assets/loading.json');
                         }
                         if (snapshot.hasData && snapshot.data != null) {
                           return Image.file(

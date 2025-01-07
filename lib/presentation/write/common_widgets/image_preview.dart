@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class ImagePreview extends StatelessWidget {
@@ -21,7 +22,7 @@ class ImagePreview extends StatelessWidget {
           width: double.infinity,
           decoration: const BoxDecoration(color: Colors.white),
           child: snapshot.connectionState == ConnectionState.waiting
-              ? const CircularProgressIndicator()
+              ? Lottie.asset('assets/dot_loading.json', width: 3, height: 3)
               : Image.file(
                   snapshot.data!,
                   fit: BoxFit.cover,
