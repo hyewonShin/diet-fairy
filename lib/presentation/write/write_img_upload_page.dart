@@ -93,12 +93,18 @@ class _UploadPageState extends State<UploadPage> {
       body: Column(
         children: [
           // 이미지 미리보기
-          imgContainer(
-            images: images,
-            multiImageFlag: multiImageFlag,
-            selectedImage: selectedImage,
-            selectedImages: selectedImages,
-            screenHeight: screenHeight,
+          Container(
+            decoration: const BoxDecoration(color: Colors.white),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: imgContainer(
+                images: images,
+                multiImageFlag: multiImageFlag,
+                selectedImage: selectedImage,
+                selectedImages: selectedImages,
+                screenHeight: screenHeight,
+              ),
+            ),
           ),
           header(
               changeMultiImageFlag: changeMultiImageFlag,

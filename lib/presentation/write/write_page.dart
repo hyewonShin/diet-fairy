@@ -49,13 +49,16 @@ class _WritePageState extends State<WritePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
-              height: screenHeight / 2.5,
-              child: imgContainer(
-                multiImageFlag: widget.multiImageFlag,
-                selectedImage: widget.selectedImage,
-                selectedImages: widget.selectedImages,
-                screenHeight: screenHeight,
+            Container(
+              decoration: const BoxDecoration(color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: imgContainer(
+                  multiImageFlag: widget.multiImageFlag,
+                  selectedImage: widget.selectedImage,
+                  selectedImages: widget.selectedImages,
+                  screenHeight: screenHeight,
+                ),
               ),
             ),
             Padding(
