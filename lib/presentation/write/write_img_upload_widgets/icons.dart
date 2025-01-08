@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget icon(bool camera) {
+Widget icon({bool camera = false}) {
   return Container(
       padding: const EdgeInsets.all(3.0),
       margin: const EdgeInsets.all(4.0),

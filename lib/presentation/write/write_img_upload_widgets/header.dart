@@ -25,8 +25,8 @@ Widget header() {
       ),
       Row(
         children: [
-          icon(true),
-          icon(false),
+          icon(camera: true),
+          icon(),
         ],
       ),
     ],

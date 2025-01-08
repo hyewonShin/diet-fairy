@@ -7,11 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 // Feed 엔티티 사용하여 데이터 맞춰서 firebase에 전송 해주기
-
 class WritePage extends StatefulWidget {
   final AssetEntity? selectedImage;
+  final List<AssetEntity>? selectedImages;
+  final bool multiImageFlag;
 
-  const WritePage({required this.selectedImage, super.key});
+  const WritePage(
+      {required this.multiImageFlag,
+      this.selectedImage,
+      this.selectedImages,
+      super.key});
 
   @override
   State<WritePage> createState() => _WritePageState();
@@ -37,13 +42,21 @@ class _WritePageState extends State<WritePage> {
         MediaQuery.of(context).size.height > 600 ? 40.0 : 24.0;
 
     return Scaffold(
-      appBar: writePageAppbar(context: context, appBarFlag: false),
+      appBar: writePageAppbar(
+        context: context,
+        appBarFlag: false,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            imgContainer(
-              selectedImage: widget.selectedImage,
-              screenHeight: screenHeight,
+            SizedBox(
+              height: screenHeight / 2.5,
+              child: imgContainer(
+                multiImageFlag: widget.multiImageFlag,
+                selectedImage: widget.selectedImage,
+                selectedImages: widget.selectedImages,
+                screenHeight: screenHeight,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),

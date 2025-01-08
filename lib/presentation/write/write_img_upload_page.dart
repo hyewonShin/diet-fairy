@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:diet_fairy/presentation/write/common_widgets/img_container.dart';
 import 'package:diet_fairy/presentation/write/write_img_upload_widgets/header.dart';
 import 'package:diet_fairy/presentation/write/common_widgets/write_page_appbar.dart';
+import 'package:diet_fairy/presentation/write/write_img_upload_widgets/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -17,6 +18,7 @@ class _UploadPageState extends State<UploadPage> {
   List<AssetEntity> images = [];
   List<AssetEntity> selectedImages = [];
   AssetEntity? selectedImage;
+  bool multiImageFlag = false;
 
   @override
   void initState() {
@@ -48,18 +50,34 @@ class _UploadPageState extends State<UploadPage> {
     });
   }
 
-  // 이미지 선택
-  void selectImage(AssetEntity asset) {
-    setState(() {
-      selectedImage = asset;
-    });
+  // 단일 이미지 선택
+  void selectImage(AssetEntity asset) async {
+    final file = await asset.file;
+    if (file != null) {
+      setState(() {
+        selectedImage = asset;
+      });
+    }
+    print('selectedImage > $selectedImage');
   }
 
-  // 다중 이미지  선택
-  void selectImages(List<AssetEntity> assets) {
+  //  다중 이미지 선택
+  void selectImages(AssetEntity asset) async {
+    final file = await asset.file;
+    if (file != null) {
+      setState(() {
+        selectedImages.add(asset); // 이미지를 선택 목록에 추가
+      });
+      print('selectedImages > $selectedImages');
+    }
+  }
+
+  //  다중 이미지 선택 플래그 전환
+  void changeMultiImageFlag() async {
     setState(() {
-      selectedImages = assets;
+      multiImageFlag = !multiImageFlag;
     });
+    print('💕 multiImageFlag > $multiImageFlag');
   }
 
   @override
@@ -69,16 +87,55 @@ class _UploadPageState extends State<UploadPage> {
 
     return Scaffold(
       appBar: writePageAppbar(
-          context: context, appBarFlag: true, selectedImage: selectedImage),
+          context: context,
+          appBarFlag: true,
+          multiImageFlag: multiImageFlag,
+          selectedImage: selectedImage,
+          selectedImages: selectedImages),
       body: Column(
         children: [
           // 이미지 미리보기
           imgContainer(
             images: images,
+            multiImageFlag: multiImageFlag,
             selectedImage: selectedImage,
+            selectedImages: selectedImages,
             screenHeight: screenHeight,
           ),
-          header(),
+          // header(), //TODO 다시 header로
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Text(
+                      'Recent',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_drop_down,
+                    size: 40,
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        changeMultiImageFlag();
+                      },
+                      child: icon(camera: true)),
+                  icon(),
+                ],
+              ),
+            ],
+          ),
           // 이미지 리스트
           Expanded(
               child: GridView.builder(
@@ -89,10 +146,9 @@ class _UploadPageState extends State<UploadPage> {
             itemCount: images.length,
             itemBuilder: (context, index) {
               final asset = images[index];
-
               return GestureDetector(
                 onTap: () {
-                  selectImage(asset); // 이미지를 선택
+                  multiImageFlag ? selectImages(asset) : selectImage(asset);
                 },
                 child: FutureBuilder<File?>(
                   future: asset.file, // 파일을 가져옴

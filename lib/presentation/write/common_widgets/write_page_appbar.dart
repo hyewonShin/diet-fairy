@@ -4,7 +4,9 @@ import 'package:diet_fairy/presentation/write/write_page.dart';
 AppBar writePageAppbar({
   required BuildContext context,
   required bool appBarFlag,
+  bool multiImageFlag = false,
   selectedImage,
+  selectedImages,
 }) {
   return AppBar(
     title: const Align(
@@ -33,7 +35,10 @@ AppBar writePageAppbar({
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => WritePage(selectedImage: selectedImage),
+                builder: (context) => WritePage(
+                    multiImageFlag: multiImageFlag,
+                    selectedImage: selectedImage,
+                    selectedImages: selectedImages),
               ),
             );
           },
