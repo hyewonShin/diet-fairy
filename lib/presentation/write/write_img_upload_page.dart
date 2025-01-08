@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:diet_fairy/presentation/write/common_widgets/img_container.dart';
-import 'package:diet_fairy/presentation/write/write_img_upload_widgets/header.dart';
 import 'package:diet_fairy/presentation/write/common_widgets/write_page_appbar.dart';
 import 'package:diet_fairy/presentation/write/write_img_upload_widgets/icons.dart';
 import 'package:flutter/material.dart';
