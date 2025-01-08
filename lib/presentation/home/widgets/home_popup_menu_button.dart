@@ -1,5 +1,5 @@
 import 'package:diet_fairy/presentation/my/my_page.dart';
-import 'package:diet_fairy/presentation/write_img_upload/write_img_upload_page.dart';
+import 'package:diet_fairy/presentation/write/write_img_upload_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePopupMenuButton extends StatelessWidget {
