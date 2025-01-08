@@ -1,4 +1,4 @@
-package com.tuna.diet-fairy
+package com.tuna.dietfairy
 
 import io.flutter.embedding.android.FlutterActivity
 
