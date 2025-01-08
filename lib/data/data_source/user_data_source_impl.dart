@@ -3,22 +3,26 @@ import 'package:diet_fairy/data/data_source/user_data_source.dart';
 import 'package:diet_fairy/data/dto/user_dto.dart';
 
 class UserDataSourceImpl implements UserDataSource {
-  final _firestore = FirebaseFirestore.instance;
+  UserDataSourceImpl(this._firestore);
+
+  final FirebaseFirestore _firestore;
+
+  late final _collection = _firestore.collection('User');
 
   @override
   Future<void> createUser(String userId, String nickname) async {
-    final collectionRef = _firestore.collection('User');
-
-    final doc = collectionRef.doc(userId);
-
-    doc.set({
-      'nickname': nickname,
-      'imageUrl': null,
-      'feedCreatedAt': [],
-      'weight': null,
-      'desiredWeight': null,
-      'likeFeed': [],
-    });
+    try {
+      _collection.doc(userId).set({
+        'nickname': nickname,
+        'imageUrl': '',
+        'feedCreatedAt': [],
+        'weight': 0,
+        'desiredWeight': 0,
+        'likeFeed': [],
+      });
+    } catch (e) {
+      print('UserDataSourceImpl createUser error: $e');
+    }
   }
 
   @override

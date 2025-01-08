@@ -9,7 +9,7 @@ class IdTextField extends StatelessWidget {
     return TextFormField(
       controller: idController,
       decoration: const InputDecoration(
-        hintText: '아이디를 입력해주세요',
+        hintText: '이메일을 입력해주세요',
       ),
       validator: (value) {
         if (value?.trim().isEmpty ?? true) {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+const primaryColor = Color(0xFF54A6FF);
+const secondaryColor = Color(0xFF88CFEF);
+
 final theme = ThemeData(
   colorScheme: const ColorScheme(
     brightness: Brightness.light,
@@ -22,5 +25,12 @@ final theme = ThemeData(
       borderSide: const BorderSide(color: Colors.grey),
       borderRadius: BorderRadius.circular(10),
     ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        backgroundColor: primaryColor),
   ),
 );

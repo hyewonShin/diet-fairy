@@ -1,15 +1,18 @@
 import 'package:diet_fairy/presentation/join/widgets/nickname_text_field.dart';
 import 'package:diet_fairy/presentation/login/login_page.dart';
+import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/presentation/widgets/id_text_field.dart';
 import 'package:diet_fairy/presentation/widgets/pw_text_field.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class JoinPage extends StatefulWidget {
+class JoinPage extends ConsumerStatefulWidget {
   @override
-  State<JoinPage> createState() => _JoinPageState();
+  ConsumerState<JoinPage> createState() => _JoinPageState();
 }
 
-class _JoinPageState extends State<JoinPage> {
+class _JoinPageState extends ConsumerState<JoinPage> {
   final _formKey = GlobalKey<FormState>();
   final idController = TextEditingController();
   final nicknameController = TextEditingController();
@@ -61,31 +64,39 @@ class _JoinPageState extends State<JoinPage> {
                     width: double.infinity,
                     height: 60,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState?.validate() ?? false) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return LoginPage();
-                              },
-                            ),
+                          final vm =
+                              ref.read(userGlobalViewModelProvider.notifier);
+
+                          final result = await vm.join(
+                            email: idController.text,
+                            nickname: nicknameController.text,
+                            password: pwController.text,
                           );
+                          // 회원가입 실패
+                          if (result != null) {
+                            await _showCupertinoDialog(context, result);
+                          } else {
+                            // 회원가입 성공
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return LoginPage();
+                                },
+                              ),
+                            );
+                          }
                         }
                       },
-                      child: Text(
+                      child: const Text(
                         '회원가입',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        backgroundColor: Colors.blue,
                       ),
                     ),
                   ),
@@ -96,6 +107,29 @@ class _JoinPageState extends State<JoinPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> _showCupertinoDialog(BuildContext context, String result) {
+    return showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          content: Text(
+            result,
+            style: const TextStyle(fontSize: 16),
+          ),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('확인'),
+            )
+          ],
+        );
+      },
     );
   }
 }
