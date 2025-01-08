@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:diet_fairy/presentation/write/common_widgets/img_container.dart';
 import 'package:diet_fairy/presentation/write/common_widgets/write_page_appbar.dart';
-import 'package:diet_fairy/presentation/write/write_img_upload_widgets/icons.dart';
+import 'package:diet_fairy/presentation/write/write_img_upload_widgets/camera_icon.dart.dart';
+import 'package:diet_fairy/presentation/write/write_img_upload_widgets/header.dart';
+import 'package:diet_fairy/presentation/write/write_img_upload_widgets/photo_library_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -98,44 +100,9 @@ class _UploadPageState extends State<UploadPage> {
             selectedImages: selectedImages,
             screenHeight: screenHeight,
           ),
-          // header(), //TODO 다시 header로
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text(
-                      'Recent',
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Icon(
-                    Icons.arrow_drop_down,
-                    size: 40,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        changeMultiImageFlag();
-                      },
-                      child: icon(camera: true)),
-                  GestureDetector(
-                      onTap: () {
-                        // 카메라 촬영
-                      },
-                      child: icon()),
-                ],
-              ),
-            ],
-          ),
+          header(
+              changeMultiImageFlag: changeMultiImageFlag,
+              multiImageFlag: multiImageFlag),
           // 이미지 리스트
           Expanded(
               child: GridView.builder(
