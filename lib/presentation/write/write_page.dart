@@ -50,6 +50,8 @@ class _WritePageState extends State<WritePage> {
         appBar: writePageAppbar(
           context: context,
           appBarFlag: false,
+          contentValue: _contentController.text,
+          tagValue: _tagController.text,
         ),
         body: SingleChildScrollView(
           child: Column(
