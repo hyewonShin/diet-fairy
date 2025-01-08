@@ -47,7 +47,7 @@ class _ImagePreviewState extends State<MultipleImagePreview> {
                   // 이미지 파일이 로드되면 해당 파일을 표시
                   return Image.file(
                     snapshot.data!, // 비동기적으로 가져온 이미지 파일
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                   );
                 } else {
                   // 이미지 로드에 실패했을 경우

@@ -30,7 +30,7 @@ class _ImagePreviewState extends State<ImagePreview> {
               ? Lottie.asset('assets/dot_loading.json', width: 3, height: 3)
               : Image.file(
                   snapshot.data!,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
         );
       },
