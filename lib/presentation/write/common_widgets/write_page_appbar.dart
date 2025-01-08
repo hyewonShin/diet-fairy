@@ -31,49 +31,51 @@ AppBar writePageAppbar({
       ),
     ),
     actions: [
-      GestureDetector(
-        onTap: () {
-          if ((selectedImage == null) &&
-              (selectedImages == null || selectedImages.isEmpty)) {
-            showCupertinoDialog(
-                context: context,
-                builder: (context) {
-                  return CupertinoAlertDialog(
-                    title: const Text('이미지를 선택해주세요'),
-                    content: const Text('총 1개 이상의 이미지가 필요합니다'),
-                    actions: [
-                      CupertinoDialogAction(
-                          isDefaultAction: true,
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('확인'))
-                    ],
+      appBarFlag
+          ? GestureDetector(
+              onTap: () {
+                if ((selectedImage == null) &&
+                    (selectedImages == null || selectedImages.isEmpty)) {
+                  showCupertinoDialog(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          title: const Text('이미지를 선택해주세요'),
+                          content: const Text('총 1개 이상의 이미지가 필요합니다'),
+                          actions: [
+                            CupertinoDialogAction(
+                                isDefaultAction: true,
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('확인'))
+                          ],
+                        );
+                      });
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WritePage(
+                          multiImageFlag: multiImageFlag,
+                          selectedImage: selectedImage,
+                          selectedImages: selectedImages),
+                    ),
                   );
-                });
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => WritePage(
-                    multiImageFlag: multiImageFlag,
-                    selectedImage: selectedImage,
-                    selectedImages: selectedImages),
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 20, top: 10),
+                child: Text(
+                  "다음",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.primary),
+                ),
               ),
-            );
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(right: 20, top: 10),
-          child: Text(
-            "다음",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Theme.of(context).colorScheme.primary),
-          ),
-        ),
-      ),
+            )
+          : const SizedBox.shrink()
     ],
   );
 }
