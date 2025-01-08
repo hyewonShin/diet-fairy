@@ -8,11 +8,8 @@ class NicknameTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: nicknameController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: '닉네임을 입력해주세요',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
       ),
       validator: (value) {
         if (value?.trim().isEmpty ?? true) {

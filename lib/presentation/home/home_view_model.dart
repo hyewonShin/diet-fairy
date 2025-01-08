@@ -16,13 +16,15 @@ class HomeViewModel extends Notifier<HomeState?> {
   HomeState? build() {
     fetch();
     return HomeState(feeds: [
-      Feed(id: '1', imageUrl: 'https://picsum.photos/200/300'),
-      Feed(id: '2', imageUrl: 'https://picsum.photos/200/300'),
-      Feed(id: '3', imageUrl: 'https://picsum.photos/200/300'),
-      Feed(id: '4', imageUrl: 'https://picsum.photos/200/300'),
-      Feed(id: '5', imageUrl: 'https://picsum.photos/200/300'),
-      Feed(id: '6', imageUrl: 'https://picsum.photos/200/300'),
-      Feed(id: '7', imageUrl: 'https://picsum.photos/200/300'),
+      Feed(
+        id: 1,
+        userId: 'userId',
+        imageUrl: 'https://picsum.photos/200/300',
+        content: 'content',
+        createdAt: DateTime.now(),
+        likeCnt: 0,
+        isLike: false,
+      ),
     ]);
   }
 
@@ -31,7 +33,15 @@ class HomeViewModel extends Notifier<HomeState?> {
   void moreFetch() {
     List<Feed> moreFeed = [
       ...state!.feeds,
-      Feed(id: '${count++}', imageUrl: 'https://picsum.photos/200/300')
+      Feed(
+        id: 2,
+        userId: 'userId2',
+        imageUrl: 'https://picsum.photos/200/300',
+        content: 'content2',
+        createdAt: DateTime.now(),
+        likeCnt: 0,
+        isLike: false,
+      ),
     ];
     state = HomeState(feeds: moreFeed);
   }

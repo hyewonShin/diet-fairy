@@ -8,11 +8,8 @@ class IdTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: idController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: '아이디를 입력해주세요',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
       ),
       validator: (value) {
         if (value?.trim().isEmpty ?? true) {
