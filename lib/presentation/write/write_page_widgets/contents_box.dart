@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget contentsBox(contentController, double screenHeight) {
+Widget contentsBox({required contentController, required double screenHeight}) {
   return Container(
     height: screenHeight / 4,
     decoration: BoxDecoration(

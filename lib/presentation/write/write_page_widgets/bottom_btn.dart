@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-Widget bottomBtn(contentController, tagController, double bottomPadding) {
+Widget bottomBtn(
+    {required context,
+    required contentController,
+    tagController,
+    required double bottomPadding}) {
   return Padding(
     padding: EdgeInsets.only(
       left: 20.0, // 좌측 여백
@@ -14,7 +18,7 @@ Widget bottomBtn(contentController, tagController, double bottomPadding) {
         print(tagController.text);
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF54A6FF), // 배경 색상
+        backgroundColor: Theme.of(context).colorScheme.primary, // 배경 색상
         shadowColor: Colors.black, // 그림자 색상
         elevation: 5, // 그림자 높이
         shape: RoundedRectangleBorder(
