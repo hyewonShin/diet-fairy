@@ -41,6 +41,13 @@ dependencies:
   firebase_crashlytics: ^4.2.0
   firebase_analytics: ^11.3.6
   lottie: ^3.3.0
+  tflite_flutter: ^0.11.0
+  image: ^4.3.0
+  image_picker: ^1.1.2
+  yolo_helper:
+    git:
+      url: https://github.com/fhelper/flutter-yolo-helper.git
+      ref: main
 
 dev_dependencies:
   flutter_test:
