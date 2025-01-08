@@ -46,6 +46,7 @@ class _WritePageState extends State<WritePage> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: writePageAppbar(
           context: context,
           appBarFlag: false,
