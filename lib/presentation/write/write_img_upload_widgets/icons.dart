@@ -7,7 +7,7 @@ Widget icon({bool camera = false}) {
       decoration:
           const BoxDecoration(color: Color(0xff808080), shape: BoxShape.circle),
       child: Icon(
-        camera ? Icons.image_search : Icons.camera_alt,
+        camera ? Icons.photo_library : Icons.camera_alt,
         size: 30,
       ));
 }

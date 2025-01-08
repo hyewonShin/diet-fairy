@@ -58,7 +58,6 @@ class _UploadPageState extends State<UploadPage> {
         selectedImage = asset;
       });
     }
-    print('selectedImage > $selectedImage');
   }
 
   //  다중 이미지 선택
@@ -68,7 +67,6 @@ class _UploadPageState extends State<UploadPage> {
       setState(() {
         selectedImages.add(asset); // 이미지를 선택 목록에 추가
       });
-      print('selectedImages > $selectedImages');
     }
   }
 
@@ -77,7 +75,6 @@ class _UploadPageState extends State<UploadPage> {
     setState(() {
       multiImageFlag = !multiImageFlag;
     });
-    print('💕 multiImageFlag > $multiImageFlag');
   }
 
   @override
@@ -131,7 +128,11 @@ class _UploadPageState extends State<UploadPage> {
                         changeMultiImageFlag();
                       },
                       child: icon(camera: true)),
-                  icon(),
+                  GestureDetector(
+                      onTap: () {
+                        // 카메라 촬영
+                      },
+                      child: icon()),
                 ],
               ),
             ],
