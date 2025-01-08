@@ -1,27 +1,47 @@
 import 'package:diet_fairy/presentation/write/common_widgets/image_preview.dart';
 import 'package:diet_fairy/presentation/write/common_widgets/multiple_image_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 Widget imgContainer({
   required bool multiImageFlag,
   required double screenHeight,
-  images,
-  selectedImage,
-  selectedImages,
+  List<AssetEntity>? images,
+  AssetEntity? selectedImage,
+  List<AssetEntity>? selectedImages,
 }) {
+  print('selectedImage  > $selectedImage');
+  print('selectedImages  > $selectedImages');
+
+  // selectedImage와 selectedImages가 모두 비어있을 때 (selectedImage가 null이고 selectedImages가 빈 리스트인 경우)
+  // if (selectedImage == null &&
+  //     (selectedImages == null || selectedImages!.isEmpty)) {
+  //   print('아무 이미지도 넘기지 않았을 경우');
+
+  //   if (images != null && images.isNotEmpty) {
+  //     // images가 존재할 때 첫 번째 이미지 미리보기
+  //     return ImagePreview(
+  //       image: images[0],
+  //       screenHeight: screenHeight,
+  //     );
+  //   }
+  // }
   // 다중 선택
   if (multiImageFlag) {
     if (selectedImages != null && selectedImages.isNotEmpty) {
       // 특정 이미지를 선택한 경우
+      print('다중 선택 : 특정 이미지를 선택한 경우');
+
       return MultipleImagePreview(
         images: selectedImages,
         screenHeight: screenHeight,
       );
-    } else {
+    } else if (images != null && images.isNotEmpty) {
       // 특정 이미지를 선택하지 않은 경우
+      print('다중 선택 : 특정 이미지를 선택하지 않은 경우');
       return MultipleImagePreview(
         images: images,
-        firstImage: images.isNotEmpty ? images[0] : null,
+        firstImage: images[0],
         screenHeight: screenHeight,
       );
     }
@@ -30,18 +50,21 @@ Widget imgContainer({
   // 단일 선택
   if (selectedImage != null) {
     // 특정 이미지를 선택한 경우
+    print('  특정 이미지를 선택한 경우');
     return ImagePreview(
       image: selectedImage,
       screenHeight: screenHeight,
     );
-  } else if (images.isNotEmpty) {
+  } else if (images != null && images.isNotEmpty) {
     // 특정 이미지를 선택하지 않은 경우, 첫 번째 이미지를 미리보기
+    print('특정 이미지를 선택하지 않은 경우, 첫 번째 이미지를 미리보기');
     return ImagePreview(
       image: images[0],
       screenHeight: screenHeight,
     );
   }
 
+  // TODO 앨범이 비어있는 경우로 예외처리
   return Container(
     height: screenHeight / 2.5,
     width: double.infinity,
