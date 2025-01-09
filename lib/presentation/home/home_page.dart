@@ -26,7 +26,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     // 데이터 불러오는 동안 로딩 화면 보여주기
     if (state.feeds == null) {
-      return Lottie.asset('assets/loading.json');
+      return Lottie.asset('assets/loading1.json');
     }
 
     return Scaffold(
