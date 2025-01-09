@@ -1,5 +1,5 @@
 import 'package:diet_fairy/data/data_source/firebase_comment_data_source.dart';
-import 'package:diet_fairy/domain/model/comment.dart';
+import 'package:diet_fairy/domain/entity/comment.dart';
 import 'package:diet_fairy/domain/repository/comment_repository.dart';
 
 class CommentRepositoryImpl implements CommentRepository {
@@ -9,7 +9,8 @@ class CommentRepositoryImpl implements CommentRepository {
 
   @override
   Future<List<Comment>> getComments() async {
-    return await _dataSource.getComments();
+    final dtos = await _dataSource.getComments();
+    return dtos.map((dto) => dto.toEntity()).toList();
   }
 
   @override

@@ -1,4 +1,4 @@
-import 'package:diet_fairy/domain/model/comment.dart';
+import 'package:diet_fairy/domain/entity/comment.dart';
 import 'package:diet_fairy/domain/repository/comment_repository.dart';
 
 class GetCommentsUseCase {

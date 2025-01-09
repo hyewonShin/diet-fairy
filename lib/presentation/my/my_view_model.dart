@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:diet_fairy/domain/usecase/get_weight_goal_use_case.dart';
 import 'package:diet_fairy/domain/usecase/get_weight_records_use_case.dart';
-import 'package:diet_fairy/domain/model/weight_goal.dart';
-import 'package:diet_fairy/domain/model/weight_record.dart';
+import 'package:diet_fairy/domain/entity/weight_goal.dart';
+import 'package:diet_fairy/domain/entity/weight_record.dart';
 import 'package:diet_fairy/data/repository/weight_repository_impl.dart';
 import 'package:diet_fairy/data/data_source/mock_weight_data_source.dart';
 

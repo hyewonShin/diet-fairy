@@ -1,4 +1,4 @@
-import 'package:diet_fairy/domain/model/weight_record.dart';
+import 'package:diet_fairy/domain/entity/weight_record.dart';
 import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
 import 'package:diet_fairy/presentation/my/my_view_model.dart';
 import 'package:flutter/material.dart';

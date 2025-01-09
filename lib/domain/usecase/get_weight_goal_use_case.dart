@@ -1,4 +1,4 @@
-import 'package:diet_fairy/domain/model/weight_goal.dart';
+import 'package:diet_fairy/domain/entity/weight_goal.dart';
 import 'package:diet_fairy/domain/repository/weight_repository.dart';
 
 class GetWeightGoalUseCase {

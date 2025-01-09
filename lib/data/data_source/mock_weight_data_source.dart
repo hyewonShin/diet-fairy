@@ -1,6 +1,6 @@
 import 'package:diet_fairy/data/data_source/weight_data_source.dart';
-import 'package:diet_fairy/domain/model/weight_goal.dart';
-import 'package:diet_fairy/domain/model/weight_record.dart';
+import 'package:diet_fairy/domain/entity/weight_goal.dart';
+import 'package:diet_fairy/domain/entity/weight_record.dart';
 
 // 임시 데이터 소스
 // 실제 데이터 소스는 WeightDataSource 클래스에 있음

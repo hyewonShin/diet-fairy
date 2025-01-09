@@ -1,5 +1,5 @@
-import 'package:diet_fairy/domain/model/weight_goal.dart';
-import 'package:diet_fairy/domain/model/weight_record.dart';
+import 'package:diet_fairy/domain/entity/weight_goal.dart';
+import 'package:diet_fairy/domain/entity/weight_record.dart';
 
 abstract class WeightDataSource {
   Future<WeightGoal> getWeightGoal();

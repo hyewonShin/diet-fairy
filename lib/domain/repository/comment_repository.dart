@@ -1,4 +1,4 @@
-import 'package:diet_fairy/domain/model/comment.dart';
+import 'package:diet_fairy/domain/entity/comment.dart';
 
 abstract class CommentRepository {
   Future<List<Comment>> getComments();

@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:diet_fairy/domain/model/comment.dart';
+import 'package:diet_fairy/data/dto/comment_dto.dart';
 
 class FirebaseCommentDataSource {
   final _firestore = FirebaseFirestore.instance;
 
-  Future<List<Comment>> getComments() async {
+  Future<List<CommentDto>> getComments() async {
     final snapshot = await _firestore
         .collection('comments')
         .orderBy('createdAt', descending: true)
@@ -12,13 +12,8 @@ class FirebaseCommentDataSource {
 
     return snapshot.docs.map((doc) {
       final data = doc.data();
-      return Comment(
-        commentId: doc.id.hashCode,
-        userId: data['userId'] ?? '',
-        userNickname: data['userNickname'] ?? '',
-        content: data['content'] ?? '',
-        createdAt: (data['createdAt'] as Timestamp).toDate(),
-      );
+      data['id'] = doc.id; // Firestore 문서 ID 추가
+      return CommentDto.fromJson(data);
     }).toList();
   }
 
