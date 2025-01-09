@@ -96,8 +96,8 @@ AppBar writePageAppbar({
                         context: context,
                         builder: (context) {
                           return CupertinoAlertDialog(
-                            title: const Text('이미지를 선택해주세요'),
-                            content: const Text('총 1개 이상의 이미지가 필요합니다'),
+                            title: const Text('이미지를 선택해주세요.'),
+                            content: const Text('업로드할 이미지를 선택한 후 진행해주세요.'),
                             actions: [
                               CupertinoDialogAction(
                                   isDefaultAction: true,
