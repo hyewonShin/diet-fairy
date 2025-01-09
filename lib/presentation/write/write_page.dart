@@ -50,8 +50,8 @@ class _WritePageState extends State<WritePage> {
         appBar: writePageAppbar(
           context: context,
           appBarFlag: false,
-          contentValue: _contentController.text,
-          tagValue: _tagController.text,
+          contentController: _contentController,
+          tagController: _tagController,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -84,8 +84,8 @@ class _WritePageState extends State<WritePage> {
         ),
         bottomNavigationBar: bottomBtn(
             context: context,
-            contentController: _contentController,
-            tagController: _tagController,
+            contentValue: _contentController.text,
+            tagValue: _tagController.text,
             bottomPadding: bottomPadding),
       ),
     );

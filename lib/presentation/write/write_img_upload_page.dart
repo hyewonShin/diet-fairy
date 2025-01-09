@@ -69,8 +69,6 @@ class _UploadPageState extends State<UploadPage> {
     final file = await asset.file;
     if (file != null) {
       setState(() {
-        //selectedImage 타입이 AssetEntity여서 file로 못 담음 => 생각해보기
-        //asset.file 과 asset 의 차이점 // asset 은 존재해도 asset.file은 존재하지 않을 수 있따?
         selectedImage = asset;
       });
       checkPersonImage(file);
