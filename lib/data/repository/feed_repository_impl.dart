@@ -31,4 +31,30 @@ class FeedRepositoryImpl implements FeedRepository {
       },
     ).toList();
   }
+
+  @override
+  Future<List<Feed>?> getMoreFeeds(int feedId) async {
+    final feedDto = await _feedDataSource.getMoreFeeds(feedId);
+
+    if (feedDto == null) {
+      return null;
+    }
+
+    return feedDto.map(
+      (e) {
+        return Feed(
+          id: e.id,
+          userId: e.userId,
+          userNickname: e.userNickname,
+          userImageUrl: e.userImageUrl,
+          imageUrl: e.imageUrl,
+          tag: e.tag,
+          content: e.content,
+          createdAt: e.createdAt,
+          likeCnt: e.likeCnt,
+          isLike: e.isLike,
+        );
+      },
+    ).toList();
+  }
 }

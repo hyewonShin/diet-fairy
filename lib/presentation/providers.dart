@@ -8,6 +8,7 @@ import 'package:diet_fairy/data/repository/user_repository_impl.dart';
 import 'package:diet_fairy/domain/repository/feed_repository.dart';
 import 'package:diet_fairy/domain/repository/user_repository.dart';
 import 'package:diet_fairy/domain/usecase/fetch_feed_usecase.dart';
+import 'package:diet_fairy/domain/usecase/fetch_more_feed_usecase.dart';
 import 'package:diet_fairy/domain/usecase/join_usecase.dart';
 import 'package:diet_fairy/domain/usecase/login_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -58,5 +59,12 @@ final fetchFeedUsecaseProvider = Provider<FetchFeedUsecase>(
   (ref) {
     final feedRepo = ref.read(_feedRespositoryProvider);
     return FetchFeedUsecase(feedRepo);
+  },
+);
+
+final fetchMoreFeedUsecaseProvider = Provider<FetchMoreFeedUsecase>(
+  (ref) {
+    final feedRepo = ref.read(_feedRespositoryProvider);
+    return FetchMoreFeedUsecase(feedRepo);
   },
 );

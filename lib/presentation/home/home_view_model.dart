@@ -24,23 +24,22 @@ class HomeViewModel extends Notifier<HomeState> {
     state = HomeState(feeds: feeds!);
   }
 
-  void moreFetch() {
+  Future<String?> moreFetch(int feedId) async {
+    final fetchMoreFeedUsecase = ref.read(fetchMoreFeedUsecaseProvider);
+    final moreFeeds = await fetchMoreFeedUsecase.execute(feedId);
+
+    if (moreFeeds == null) {
+      return '마지막 게시글입니다.';
+    }
+
     List<Feed> moreFeed = [
       ...state.feeds!,
-      Feed(
-        id: 2,
-        userId: 'userId2',
-        userNickname: '유저2',
-        userImageUrl: 'https://picsum.photos/200/300',
-        imageUrl: ['https://picsum.photos/200/300'],
-        tag: [],
-        content: 'content2',
-        createdAt: DateTime.now(),
-        likeCnt: 0,
-        isLike: false,
-      ),
+      ...moreFeeds,
     ];
+
+    // 상태 업데이트
     state = HomeState(feeds: moreFeed);
+    return null;
   }
 }
 

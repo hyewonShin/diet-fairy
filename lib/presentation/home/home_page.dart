@@ -3,6 +3,8 @@ import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
 import 'package:diet_fairy/presentation/home/home_view_model.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_feed_image_page_view.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_popup_menu_button.dart';
+import 'package:diet_fairy/util/dialog.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
@@ -31,10 +33,16 @@ class _HomePageState extends ConsumerState<HomePage> {
       body: PageView.builder(
         scrollDirection: Axis.vertical,
         itemCount: state.feeds!.length,
-        onPageChanged: (page) {
+        onPageChanged: (page) async {
           // 마지막 페이지일 경우 추가 피드를 가져온다
           if (page + 1 == state.feeds!.length) {
-            vm.moreFetch();
+            final lastFeedId = state.feeds![page].id;
+            final result = await vm.moreFetch(lastFeedId);
+            if (result != null) {
+              // TODO: 마지막 게시글일 때 dialog 띄우는 건데 현재 동작 안함 개선 필요
+              await customCupertinoDialog(
+                  context: context, title: null, content: result);
+            }
           }
         },
         itemBuilder: (context, feedIndex) {
