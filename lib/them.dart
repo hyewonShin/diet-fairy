@@ -33,4 +33,7 @@ final theme = ThemeData(
         ),
         backgroundColor: primaryColor),
   ),
+  bottomSheetTheme: const BottomSheetThemeData(
+    backgroundColor: Colors.transparent,
+  ),
 );
