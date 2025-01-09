@@ -19,6 +19,12 @@ class CommentItem extends StatelessWidget {
           CircleAvatar(
             backgroundColor: Colors.grey[300],
             radius: 20,
+            backgroundImage: comment.userImageUrl != null
+                ? NetworkImage(comment.userImageUrl!)
+                : null,
+            child: comment.userImageUrl == null
+                ? const Icon(Icons.person, size: 24)
+                : null,
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -39,7 +45,7 @@ class CommentItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  _formatDate(comment.createdAt),
+                  _formatDate(DateTime.parse(comment.createdAt)),
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 12,

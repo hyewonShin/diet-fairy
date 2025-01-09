@@ -1,13 +1,12 @@
 import 'package:diet_fairy/domain/entity/user.dart';
+import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:diet_fairy/domain/usecase/get_weight_goal_use_case.dart';
 import 'package:diet_fairy/domain/usecase/get_weight_records_use_case.dart';
 import 'package:diet_fairy/domain/entity/weight_goal.dart';
 import 'package:diet_fairy/domain/entity/weight_record.dart';
 import 'package:diet_fairy/data/repository/weight_repository_impl.dart';
-import 'package:diet_fairy/data/repository/user_repository_provider.dart';
 import 'package:diet_fairy/data/data_source/mock_weight_data_source.dart';
-import 'package:diet_fairy/domain/usecase/get_user_use_case.dart';
 
 class MyState {
   final WeightGoal? weightGoal;
@@ -39,24 +38,23 @@ class MyState {
 
 final myViewModelProvider = StateNotifierProvider<MyViewModel, MyState>((ref) {
   final weightRepository = WeightRepositoryImpl(MockWeightDataSource());
-  final userRepository = ref.watch(userRepositoryProvider);
 
   return MyViewModel(
     getWeightGoalUseCase: GetWeightGoalUseCase(weightRepository),
     getWeightRecordsUseCase: GetWeightRecordsUseCase(weightRepository),
-    getUserUseCase: GetUserUseCase(userRepository),
+    ref: ref,
   );
 });
 
 class MyViewModel extends StateNotifier<MyState> {
   final GetWeightGoalUseCase getWeightGoalUseCase;
   final GetWeightRecordsUseCase getWeightRecordsUseCase;
-  final GetUserUseCase getUserUseCase;
+  final Ref ref;
 
   MyViewModel({
     required this.getWeightGoalUseCase,
     required this.getWeightRecordsUseCase,
-    required this.getUserUseCase,
+    required this.ref,
   }) : super(MyState()) {
     _fetchData();
   }
@@ -67,18 +65,17 @@ class MyViewModel extends StateNotifier<MyState> {
     try {
       final weightGoalFuture = getWeightGoalUseCase.execute();
       final recordsFuture = getWeightRecordsUseCase.execute(DateTime.now());
-      final userFuture = getUserUseCase.execute('current_user_id');
+      final user = ref.read(userGlobalViewModelProvider);
 
       final results = await Future.wait([
         weightGoalFuture,
         recordsFuture,
-        userFuture,
       ]);
 
       state = state.copyWith(
         weightGoal: results[0] as WeightGoal?,
         records: results[1] as List<WeightRecord>,
-        user: results[2] as User?,
+        user: user,
         isLoading: false,
       );
 
@@ -86,19 +83,7 @@ class MyViewModel extends StateNotifier<MyState> {
     } catch (e, stackTrace) {
       print('Error fetching data: $e');
       print('Stack trace: $stackTrace');
-
-      state = state.copyWith(
-        isLoading: false,
-        user: User(
-          userId: 'default_id',
-          nickname: '사용자',
-          imageUrl: null,
-          feedCreatedAt: [],
-          weight: 0,
-          desiredWeight: 0,
-          likeFeed: [],
-        ),
-      );
+      state = state.copyWith(isLoading: false);
     }
   }
 }

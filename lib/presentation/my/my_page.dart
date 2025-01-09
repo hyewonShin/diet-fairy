@@ -97,6 +97,7 @@ class MyPage extends ConsumerWidget {
                           showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
+                            enableDrag: true,
                             backgroundColor: Colors.transparent,
                             builder: (context) => const CommentBottomSheet(),
                           );

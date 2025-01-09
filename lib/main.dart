@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:diet_fairy/presentation/join/join_page.dart';
+import 'package:diet_fairy/presentation/login/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:diet_fairy/them.dart';
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Diet Fairy',
       theme: theme,
-      home: JoinPage(),
+      home: LoginPage(),
     );
   }
 }

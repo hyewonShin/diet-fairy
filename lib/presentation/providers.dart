@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diet_fairy/data/data_source/feed_data_source.dart';
 import 'package:diet_fairy/data/data_source/feed_data_source_impl.dart';
-import 'package:diet_fairy/data/data_source/firebase_user_data_source.dart';
 import 'package:diet_fairy/data/data_source/user_data_source.dart';
 import 'package:diet_fairy/data/data_source/user_data_source_impl.dart';
 import 'package:diet_fairy/data/repository/feed_repository_impl.dart';
@@ -13,6 +12,7 @@ import 'package:diet_fairy/domain/usecase/fetch_more_feed_usecase.dart';
 import 'package:diet_fairy/domain/usecase/join_usecase.dart';
 import 'package:diet_fairy/domain/usecase/login_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
 
 final _firebase = FirebaseFirestore.instance;
 
@@ -25,7 +25,7 @@ final _userDataSourceProvider = Provider<UserDataSource>(
 final _userRepositoryProvider = Provider<UserRepository>(
   (ref) {
     final dataSource = ref.read(_userDataSourceProvider);
-    return UserRepositoryImpl(dataSource as FirebaseUserDataSource);
+    return UserRepositoryImpl(dataSource);
   },
 );
 
@@ -69,3 +69,32 @@ final fetchMoreFeedUsecaseProvider = Provider<FetchMoreFeedUsecase>(
     return FetchMoreFeedUsecase(feedRepo);
   },
 );
+
+// Comment 관련 Providers
+final currentFeedIdProvider = Provider<int>((ref) {
+  throw UnimplementedError('currentFeedIdProvider not implemented');
+});
+
+final commentExpandedProvider = StateProvider<bool>((ref) => false);
+
+// Comment Provider Widget
+class CommentProvider extends ConsumerWidget {
+  final int feedId;
+  final Widget child;
+
+  const CommentProvider({
+    super.key,
+    required this.feedId,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ProviderScope(
+      overrides: [
+        currentFeedIdProvider.overrideWithValue(feedId),
+      ],
+      child: child,
+    );
+  }
+}

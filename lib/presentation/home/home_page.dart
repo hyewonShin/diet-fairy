@@ -3,6 +3,7 @@ import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
 import 'package:diet_fairy/presentation/home/home_view_model.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_feed_image_page_view.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_popup_menu_button.dart';
+import 'package:diet_fairy/presentation/providers.dart';
 import 'package:diet_fairy/util/dialog.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,9 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+  // 현재 보고 있는 피드의 인덱스를 저장
+  int currentFeedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(homeViewModelProvider);
@@ -33,6 +37,9 @@ class _HomePageState extends ConsumerState<HomePage> {
         scrollDirection: Axis.vertical,
         itemCount: state.feeds!.length,
         onPageChanged: (page) async {
+          setState(() {
+            currentFeedIndex = page; // 페이지 변경 시 인덱스 업데이트
+          });
           // 마지막 페이지일 경우 추가 피드를 가져온다
           if (page + 1 == state.feeds!.length) {
             final lastFeedId = state.feeds![page].id;
@@ -49,7 +56,15 @@ class _HomePageState extends ConsumerState<HomePage> {
 
           return Stack(
             children: [
-              HomeFeedImagePageView(feed),
+              GestureDetector(
+                onTap: () {
+                  // 피드 영역 탭했을 때 댓글창 최소화
+                  if (ref.read(commentExpandedProvider)) {
+                    ref.read(commentExpandedProvider.notifier).state = false;
+                  }
+                },
+                child: HomeFeedImagePageView(feed),
+              ),
               Center(
                 child: Text(
                   state.feeds![feedIndex].id.toString(),
@@ -80,7 +95,12 @@ class _HomePageState extends ConsumerState<HomePage> {
           );
         },
       ),
-      bottomSheet: CommentBottomSheet(),
+      bottomSheet: state.feeds != null
+          ? CommentProvider(
+              feedId: state.feeds![currentFeedIndex].id,
+              child: const CommentBottomSheet(),
+            )
+          : null,
     );
   }
 }
