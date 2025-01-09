@@ -49,6 +49,21 @@ class HomeFeedContent extends StatelessWidget {
                   Text(DateFormat('y년 M월 d일').format(feed.createdAt)),
                 ],
               ),
+
+              const Spacer(),
+
+              // 댓글 페이지 버튼
+              IconButton(
+                onPressed: () {
+                  // TODO: merge 하고 주석 해제
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //   builder: (context) {
+                  //     return CommentPage(feed.id);
+                  //   },
+                  // ));
+                },
+                icon: const Icon(Icons.comment_outlined),
+              )
             ],
           ),
 
