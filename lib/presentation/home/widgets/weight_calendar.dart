@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:diet_fairy/domain/model/weight_record.dart';
+import 'package:diet_fairy/domain/entity/weight_record.dart';
 
 class WeightCalendar extends StatelessWidget {
   final List<WeightRecord> records;

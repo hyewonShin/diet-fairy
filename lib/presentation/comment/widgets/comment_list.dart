@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:diet_fairy/domain/model/comment.dart';
+import 'package:diet_fairy/domain/entity/comment.dart';
 import 'package:diet_fairy/presentation/comment/widgets/comment_item.dart';
 
 class CommentList extends StatelessWidget {
