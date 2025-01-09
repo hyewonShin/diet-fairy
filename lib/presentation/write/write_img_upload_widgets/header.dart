@@ -9,7 +9,7 @@ Widget header({required changeMultiImageFlag, required multiImageFlag}) {
       const Row(
         children: [
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: EdgeInsets.all(10.0),
             child: Text(
               'Recent',
               style: TextStyle(
