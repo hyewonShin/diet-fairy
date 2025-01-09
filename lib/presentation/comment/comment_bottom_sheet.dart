@@ -1,38 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:diet_fairy/domain/model/comment.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:diet_fairy/presentation/comment/comment_view_model.dart';
 import 'package:diet_fairy/presentation/comment/widgets/comment_header.dart';
 import 'package:diet_fairy/presentation/comment/widgets/comment_input.dart';
 import 'package:diet_fairy/presentation/comment/widgets/comment_list.dart';
 
 /// 댓글 목록을 보여주는 바텀시트
-class CommentBottomSheet extends StatefulWidget {
+class CommentBottomSheet extends ConsumerWidget {
   const CommentBottomSheet({super.key});
 
   @override
-  State<CommentBottomSheet> createState() => _CommentBottomSheetState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(commentViewModelProvider);
 
-class _CommentBottomSheetState extends State<CommentBottomSheet> {
-  // 댓글 목록을 저장할 상태 변수
-  final List<Comment> comments = [
-    Comment(
-      commentId: 3378,
-      userId: 'user_3378',
-      userNickname: '익명의 다이어터3378',
-      content: '너무너무 맛있어 보여요😋',
-      createdAt: DateTime(2025, 1, 3),
-    ),
-    Comment(
-      commentId: 3379,
-      userId: 'user_3379',
-      userNickname: '익명의 다이어터3379',
-      content: '꿀팁 감사해요><',
-      createdAt: DateTime(2025, 1, 3),
-    ),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.9,
       decoration: const BoxDecoration(
@@ -41,10 +21,13 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
       ),
       child: Column(
         children: [
-          CommentHeader(commentCount: comments.length),
-          Expanded(
-            child: CommentList(comments: comments),
-          ),
+          CommentHeader(commentCount: state.comments.length),
+          if (state.isLoading)
+            const Center(child: CircularProgressIndicator())
+          else
+            Expanded(
+              child: CommentList(comments: state.comments),
+            ),
           const CommentInput(),
         ],
       ),
