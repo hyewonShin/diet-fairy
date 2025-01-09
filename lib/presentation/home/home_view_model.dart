@@ -1,8 +1,9 @@
 import 'package:diet_fairy/domain/entity/feed.dart';
+import 'package:diet_fairy/presentation/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeState {
-  List<Feed> feeds;
+  List<Feed>? feeds;
   HomeState({required this.feeds});
 
   HomeState copy({List<Feed>? feeds}) {
@@ -10,47 +11,22 @@ class HomeState {
   }
 }
 
-class HomeViewModel extends Notifier<HomeState?> {
-  int count = 7;
+class HomeViewModel extends Notifier<HomeState> {
   @override
-  HomeState? build() {
+  HomeState build() {
     fetch();
-    return HomeState(feeds: [
-      Feed(
-        id: 1,
-        userId: 'userId',
-        userNickname: '유저1',
-        userImageUrl: 'https://picsum.photos/200/300',
-        imageUrl: [
-          'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FPFwMQ%2FbtsK6yrl4Iz%2FsRzYlQ6IMH0KyNSuPAS7Mk%2Fimg.jpg',
-          'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcyILwY%2FbtsK7NIgpUc%2FwnqHAYfG9HTgJL8o1CyTZK%2Fimg.png'
-        ],
-        tag: [],
-        content: 'content',
-        createdAt: DateTime.now(),
-        likeCnt: 0,
-        isLike: false,
-      ),
-      Feed(
-        id: 3,
-        userId: 'userId',
-        userNickname: '유저2',
-        userImageUrl: 'https://picsum.photos/200/300',
-        imageUrl: ['https://picsum.photos/200/300'],
-        tag: [],
-        content: 'content',
-        createdAt: DateTime.now(),
-        likeCnt: 0,
-        isLike: false,
-      ),
-    ]);
+    return HomeState(feeds: null);
   }
 
-  Future<void> fetch() async {}
+  Future<void> fetch() async {
+    final fetchFeedUsecase = ref.read(fetchFeedUsecaseProvider);
+    final feeds = await fetchFeedUsecase.execute();
+    state = HomeState(feeds: feeds!);
+  }
 
   void moreFetch() {
     List<Feed> moreFeed = [
-      ...state!.feeds,
+      ...state.feeds!,
       Feed(
         id: 2,
         userId: 'userId2',
@@ -68,7 +44,7 @@ class HomeViewModel extends Notifier<HomeState?> {
   }
 }
 
-final homeViewModelProvider = NotifierProvider<HomeViewModel, HomeState?>(
+final homeViewModelProvider = NotifierProvider<HomeViewModel, HomeState>(
   () {
     return HomeViewModel();
   },
