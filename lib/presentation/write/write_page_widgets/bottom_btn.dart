@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 Widget bottomBtn(
-    {required context,
-    required contentController,
-    tagController,
-    required double bottomPadding}) {
+    {required context, contentValue, tagValue, required double bottomPadding}) {
   return Padding(
     padding: EdgeInsets.only(
       left: 20.0, // 좌측 여백
@@ -13,9 +10,8 @@ Widget bottomBtn(
     ),
     child: ElevatedButton(
       onPressed: () {
-        print('Button Pressed!');
-        print(contentController.text);
-        print(tagController.text);
+        print(contentValue);
+        print(tagValue);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.primary, // 배경 색상
