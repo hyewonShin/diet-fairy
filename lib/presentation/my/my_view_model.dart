@@ -64,7 +64,6 @@ class MyViewModel extends StateNotifier<MyState> {
       );
     } catch (e) {
       state = state.copyWith(isLoading: false);
-      // 에러 처리
     }
   }
 }
