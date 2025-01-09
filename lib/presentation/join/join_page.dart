@@ -3,7 +3,7 @@ import 'package:diet_fairy/presentation/login/login_page.dart';
 import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/presentation/widgets/id_text_field.dart';
 import 'package:diet_fairy/presentation/widgets/pw_text_field.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:diet_fairy/util/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -76,7 +76,11 @@ class _JoinPageState extends ConsumerState<JoinPage> {
                           );
                           // 회원가입 실패
                           if (result != null) {
-                            await _showCupertinoDialog(context, result);
+                            await customCupertinoDialog(
+                              context: context,
+                              title: null,
+                              content: result,
+                            );
                           } else {
                             // 회원가입 성공
                             Navigator.push(
@@ -107,29 +111,6 @@ class _JoinPageState extends ConsumerState<JoinPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Future<dynamic> _showCupertinoDialog(BuildContext context, String result) {
-    return showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          content: Text(
-            result,
-            style: const TextStyle(fontSize: 16),
-          ),
-          actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('확인'),
-            )
-          ],
-        );
-      },
     );
   }
 }
