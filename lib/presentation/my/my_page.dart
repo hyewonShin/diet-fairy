@@ -3,6 +3,9 @@ import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
 import 'package:diet_fairy/presentation/my/my_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:diet_fairy/presentation/my/widgets/my_app_bar.dart';
+import 'package:diet_fairy/presentation/home/home_page.dart';
+import 'package:diet_fairy/presentation/profile/profile_edit_page.dart';
 
 class MyPage extends ConsumerWidget {
   const MyPage({super.key});
@@ -12,6 +15,27 @@ class MyPage extends ConsumerWidget {
     final state = ref.watch(myViewModelProvider);
 
     return Scaffold(
+      appBar: MyAppBar(
+        user: state.user!,
+        onProfileTap: () {
+          // 프로필 수정 페이지로 이동
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfileEditPage(user: state.user!),
+            ),
+          );
+        },
+        onHomeTap: () {
+          // 홈페이지로 이동
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(state.user!),
+            ),
+          );
+        },
+      ),
       body: SafeArea(
         child: Column(
           children: [
