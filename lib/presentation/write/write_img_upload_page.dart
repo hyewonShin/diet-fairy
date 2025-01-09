@@ -171,7 +171,15 @@ class _UploadPageState extends State<UploadPage> {
                   if (!model.isInitialized) {
                     return;
                   }
-                  multiImageFlag ? selectImages(asset) : selectImage(asset);
+
+                  // 다중 선택 시, 동일한 이미지 선택하는 경우 체크 표시 제거
+                  if (multiImageFlag) {
+                    selectedImages.contains(asset)
+                        ? selectedImages.remove(asset)
+                        : selectImages(asset);
+                  }
+
+                  selectImage(asset);
                 },
                 child: FutureBuilder<File?>(
                   future: asset.file, // 파일을 가져옴
@@ -180,19 +188,47 @@ class _UploadPageState extends State<UploadPage> {
                       return Lottie.asset('assets/loading2.json');
                     }
                     if (snapshot.hasData && snapshot.data != null) {
-                      final isSelected = selectedImage != null &&
-                          selectedImage?.id == asset.id;
+                      final bool isSelected;
+
+                      // 선택한 이미지인지 여부 확인
+                      if (multiImageFlag) {
+                        isSelected = selectedImages.isNotEmpty &&
+                            selectedImages.contains(asset);
+                      } else {
+                        isSelected = selectedImage != null &&
+                            selectedImage?.id == asset.id;
+                      }
 
                       return isSelected
-                          ? Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 4)),
-                              child: Image.file(
-                                snapshot.data!,
-                                fit: BoxFit.cover,
-                              ),
+                          ? Stack(
+                              children: [
+                                AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Image.file(
+                                    snapshot.data!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 10,
+                                  right: 10,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        color: Theme.of(context).primaryColor),
+                                    width: 20,
+                                    height: 20,
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             )
                           : Image.file(
                               snapshot.data!,
