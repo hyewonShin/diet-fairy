@@ -1,6 +1,7 @@
 import 'package:diet_fairy/domain/entity/user.dart';
 import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
 import 'package:diet_fairy/presentation/home/home_view_model.dart';
+import 'package:diet_fairy/presentation/home/widgets/home_feed_image_page_view.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_popup_menu_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,20 +31,15 @@ class _HomePageState extends ConsumerState<HomePage> {
             vm.moreFetch();
           }
         },
-        itemBuilder: (context, index) {
+        itemBuilder: (context, feedIndex) {
+          final feed = state.feeds[feedIndex];
+
           return Stack(
             children: [
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                child: Image.network(
-                  state.feeds[index].imageUrl,
-                  fit: BoxFit.fill,
-                ),
-              ),
+              HomeFeedImagePageView(feed),
               Center(
                 child: Text(
-                  state.feeds[index].id.toString(),
+                  state.feeds[feedIndex].id.toString(),
                   style: TextStyle(fontSize: 100),
                 ),
               ),
@@ -53,6 +49,20 @@ class _HomePageState extends ConsumerState<HomePage> {
                 right: 10,
                 child: HomePopupMenuButton(),
               ),
+              // 좋아요 기능
+              // Positioned(
+              //   right: 10,
+              //   bottom: MediaQuery.of(context).size.height * 0.2 + 20,
+              //   child: Container(
+              //     height: 50,
+              //     width: 50,
+              //     color: Colors.transparent,
+              //     child: Icon(
+              //       Icons.favorite_border,
+              //       size: 30,
+              //     ),
+              //   ),
+              // )
             ],
           );
         },

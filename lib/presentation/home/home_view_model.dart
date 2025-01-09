@@ -19,7 +19,25 @@ class HomeViewModel extends Notifier<HomeState?> {
       Feed(
         id: 1,
         userId: 'userId',
-        imageUrl: 'https://picsum.photos/200/300',
+        userNickname: '유저1',
+        userImageUrl: 'https://picsum.photos/200/300',
+        imageUrl: [
+          'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FPFwMQ%2FbtsK6yrl4Iz%2FsRzYlQ6IMH0KyNSuPAS7Mk%2Fimg.jpg',
+          'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcyILwY%2FbtsK7NIgpUc%2FwnqHAYfG9HTgJL8o1CyTZK%2Fimg.png'
+        ],
+        tag: [],
+        content: 'content',
+        createdAt: DateTime.now(),
+        likeCnt: 0,
+        isLike: false,
+      ),
+      Feed(
+        id: 3,
+        userId: 'userId',
+        userNickname: '유저2',
+        userImageUrl: 'https://picsum.photos/200/300',
+        imageUrl: ['https://picsum.photos/200/300'],
+        tag: [],
         content: 'content',
         createdAt: DateTime.now(),
         likeCnt: 0,
@@ -36,7 +54,10 @@ class HomeViewModel extends Notifier<HomeState?> {
       Feed(
         id: 2,
         userId: 'userId2',
-        imageUrl: 'https://picsum.photos/200/300',
+        userNickname: '유저2',
+        userImageUrl: 'https://picsum.photos/200/300',
+        imageUrl: ['https://picsum.photos/200/300'],
+        tag: [],
         content: 'content2',
         createdAt: DateTime.now(),
         likeCnt: 0,
