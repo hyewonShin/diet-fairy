@@ -40,7 +40,7 @@ class _ImagePreviewState extends State<MultipleImagePreview> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   // 로딩 중일 때 로딩 애니메이션 표시
                   return Center(
-                    child: Lottie.asset('assets/dot_loading.json',
+                    child: Lottie.asset('assets/loading1.json',
                         width: 3, height: 3),
                   );
                 } else if (snapshot.hasData && snapshot.data != null) {

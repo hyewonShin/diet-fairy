@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:diet_fairy/presentation/write/common_widgets/img_container.dart';
 import 'package:diet_fairy/presentation/write/common_widgets/write_page_appbar.dart';
 import 'package:diet_fairy/presentation/write/write_img_upload_widgets/header.dart';
-import 'package:diet_fairy/presentation/write/yolo_detection.dart';
+import 'package:diet_fairy/presentation/write/yolo/yolo_detection.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
@@ -177,7 +177,7 @@ class _UploadPageState extends State<UploadPage> {
                   future: asset.file, // 파일을 가져옴
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Lottie.asset('assets/loading.json');
+                      return Lottie.asset('assets/loading2.json');
                     }
                     if (snapshot.hasData && snapshot.data != null) {
                       return Image.file(
