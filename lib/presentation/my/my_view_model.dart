@@ -1,11 +1,11 @@
 import 'package:diet_fairy/domain/entity/user.dart';
-import 'package:diet_fairy/domain/repository/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:diet_fairy/domain/usecase/get_weight_goal_use_case.dart';
 import 'package:diet_fairy/domain/usecase/get_weight_records_use_case.dart';
 import 'package:diet_fairy/domain/entity/weight_goal.dart';
 import 'package:diet_fairy/domain/entity/weight_record.dart';
 import 'package:diet_fairy/data/repository/weight_repository_impl.dart';
+import 'package:diet_fairy/data/repository/user_repository_provider.dart';
 import 'package:diet_fairy/data/data_source/mock_weight_data_source.dart';
 import 'package:diet_fairy/domain/usecase/get_user_use_case.dart';
 
@@ -38,12 +38,13 @@ class MyState {
 }
 
 final myViewModelProvider = StateNotifierProvider<MyViewModel, MyState>((ref) {
-  final repository = WeightRepositoryImpl(MockWeightDataSource());
+  final weightRepository = WeightRepositoryImpl(MockWeightDataSource());
+  final userRepository = ref.watch(userRepositoryProvider);
 
   return MyViewModel(
-    getWeightGoalUseCase: GetWeightGoalUseCase(repository),
-    getWeightRecordsUseCase: GetWeightRecordsUseCase(repository),
-    getUserUseCase: GetUserUseCase(repository as UserRepository),
+    getWeightGoalUseCase: GetWeightGoalUseCase(weightRepository),
+    getWeightRecordsUseCase: GetWeightRecordsUseCase(weightRepository),
+    getUserUseCase: GetUserUseCase(userRepository),
   );
 });
 
@@ -64,18 +65,40 @@ class MyViewModel extends StateNotifier<MyState> {
     state = state.copyWith(isLoading: true);
 
     try {
-      final weightGoal = await getWeightGoalUseCase.execute();
-      final records = await getWeightRecordsUseCase.execute(DateTime.now());
-      final user = await getUserUseCase.execute('current_user_id');
+      final weightGoalFuture = getWeightGoalUseCase.execute();
+      final recordsFuture = getWeightRecordsUseCase.execute(DateTime.now());
+      final userFuture = getUserUseCase.execute('current_user_id');
+
+      final results = await Future.wait([
+        weightGoalFuture,
+        recordsFuture,
+        userFuture,
+      ]);
 
       state = state.copyWith(
-        weightGoal: weightGoal,
-        records: records,
-        user: user,
+        weightGoal: results[0] as WeightGoal?,
+        records: results[1] as List<WeightRecord>,
+        user: results[2] as User?,
         isLoading: false,
       );
-    } catch (e) {
-      state = state.copyWith(isLoading: false);
+
+      print('Data fetched successfully: ${state.user?.nickname}');
+    } catch (e, stackTrace) {
+      print('Error fetching data: $e');
+      print('Stack trace: $stackTrace');
+
+      state = state.copyWith(
+        isLoading: false,
+        user: User(
+          userId: 'default_id',
+          nickname: '사용자',
+          imageUrl: null,
+          feedCreatedAt: [],
+          weight: 0,
+          desiredWeight: 0,
+          likeFeed: [],
+        ),
+      );
     }
   }
 }

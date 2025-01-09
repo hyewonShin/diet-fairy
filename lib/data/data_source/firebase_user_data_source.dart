@@ -8,12 +8,33 @@ class FirebaseUserDataSource {
   final _storage = FirebaseStorage.instance;
 
   Future<UserDto?> getUser(String userId) async {
-    final doc = await _firestore.collection('users').doc(userId).get();
-    if (!doc.exists) return null;
+    try {
+      final doc = await _firestore.collection('users').doc(userId).get();
 
-    final data = doc.data()!;
-    data['id'] = doc.id;
-    return UserDto.fromJson(data);
+      if (!doc.exists) {
+        print('User document does not exist');
+        // 새 사용자 생성
+        final newUser = UserDto(
+          userId: userId,
+          nickname: '새로운 사용자',
+          imageUrl: null,
+          feedCreatedAt: [],
+          weight: 0,
+          desiredWeight: 0,
+          likeFeed: [],
+        );
+        await createUser(newUser);
+        return newUser;
+      }
+
+      final data = doc.data()!;
+      data['userId'] = doc.id; // id 대신 userId 사용
+      return UserDto.fromJson(data);
+    } catch (e, stackTrace) {
+      print('Error getting user: $e');
+      print('Stack trace: $stackTrace');
+      return null;
+    }
   }
 
   Future<void> updateUser(UserDto user) async {

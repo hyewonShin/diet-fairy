@@ -14,11 +14,18 @@ class MyPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(myViewModelProvider);
 
+    if (state.isLoading || state.user == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: MyAppBar(
         user: state.user!,
         onProfileTap: () {
-          // 프로필 수정 페이지로 이동
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -27,7 +34,6 @@ class MyPage extends ConsumerWidget {
           );
         },
         onHomeTap: () {
-          // 홈페이지로 이동
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
