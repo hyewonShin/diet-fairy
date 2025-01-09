@@ -1,8 +1,9 @@
 import 'package:diet_fairy/domain/entity/feed.dart';
+import 'package:diet_fairy/presentation/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeState {
-  List<Feed> feeds;
+  List<Feed>? feeds;
   HomeState({required this.feeds});
 
   HomeState copy({List<Feed>? feeds}) {
@@ -10,44 +11,39 @@ class HomeState {
   }
 }
 
-class HomeViewModel extends Notifier<HomeState?> {
-  int count = 7;
+class HomeViewModel extends Notifier<HomeState> {
   @override
-  HomeState? build() {
+  HomeState build() {
     fetch();
-    return HomeState(feeds: [
-      Feed(
-        id: 1,
-        userId: 'userId',
-        imageUrl: 'https://picsum.photos/200/300',
-        content: 'content',
-        createdAt: DateTime.now(),
-        likeCnt: 0,
-        isLike: false,
-      ),
-    ]);
+    return HomeState(feeds: null);
   }
 
-  Future<void> fetch() async {}
+  Future<void> fetch() async {
+    final fetchFeedUsecase = ref.read(fetchFeedUsecaseProvider);
+    final feeds = await fetchFeedUsecase.execute();
+    state = HomeState(feeds: feeds!);
+  }
 
-  void moreFetch() {
+  Future<String?> moreFetch(int feedId) async {
+    final fetchMoreFeedUsecase = ref.read(fetchMoreFeedUsecaseProvider);
+    final moreFeeds = await fetchMoreFeedUsecase.execute(feedId);
+
+    if (moreFeeds == null) {
+      return '마지막 게시글입니다.';
+    }
+
     List<Feed> moreFeed = [
-      ...state!.feeds,
-      Feed(
-        id: 2,
-        userId: 'userId2',
-        imageUrl: 'https://picsum.photos/200/300',
-        content: 'content2',
-        createdAt: DateTime.now(),
-        likeCnt: 0,
-        isLike: false,
-      ),
+      ...state.feeds!,
+      ...moreFeeds,
     ];
+
+    // 상태 업데이트
     state = HomeState(feeds: moreFeed);
+    return null;
   }
 }
 
-final homeViewModelProvider = NotifierProvider<HomeViewModel, HomeState?>(
+final homeViewModelProvider = NotifierProvider<HomeViewModel, HomeState>(
   () {
     return HomeViewModel();
   },
