@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-Widget bottomBtn(
-    {required context,
-    required contentController,
-    tagController,
-    required double bottomPadding}) {
+Widget bottomBtn({
+  required context,
+  contentValue,
+  tagValue,
+  required double bottomPadding,
+  required GlobalKey<FormState> formKey,
+}) {
   return Padding(
     padding: EdgeInsets.only(
       left: 20.0, // 좌측 여백
@@ -13,9 +15,13 @@ Widget bottomBtn(
     ),
     child: ElevatedButton(
       onPressed: () {
-        print('Button Pressed!');
-        print(contentController.text);
-        print(tagController.text);
+        if (formKey.currentState?.validate() ?? false) {
+          print('내용: $contentValue, 태그: $tagValue');
+        } else {
+          print('폼이 유효하지 않음');
+        }
+        print(contentValue);
+        print(tagValue);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.primary, // 배경 색상

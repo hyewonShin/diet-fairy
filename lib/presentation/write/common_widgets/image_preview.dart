@@ -27,10 +27,10 @@ class _ImagePreviewState extends State<ImagePreview> {
           width: double.infinity,
           decoration: const BoxDecoration(color: Colors.white),
           child: snapshot.connectionState == ConnectionState.waiting
-              ? Lottie.asset('assets/dot_loading.json', width: 3, height: 3)
+              ? Lottie.asset('assets/loading1.json', width: 3, height: 3)
               : Image.file(
                   snapshot.data!,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
         );
       },

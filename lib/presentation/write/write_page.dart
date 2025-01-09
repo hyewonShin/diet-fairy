@@ -25,6 +25,7 @@ class WritePage extends StatefulWidget {
 class _WritePageState extends State<WritePage> {
   final _contentController = TextEditingController();
   final _tagController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -41,42 +42,58 @@ class _WritePageState extends State<WritePage> {
     final bottomPadding =
         MediaQuery.of(context).size.height > 600 ? 40.0 : 24.0;
 
-    return Scaffold(
-      appBar: writePageAppbar(
-        context: context,
-        appBarFlag: false,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: screenHeight / 2.5,
-              child: imgContainer(
-                multiImageFlag: widget.multiImageFlag,
-                selectedImage: widget.selectedImage,
-                selectedImages: widget.selectedImages,
-                screenHeight: screenHeight,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  contentsBox(
-                      contentController: _contentController,
-                      screenHeight: screenHeight),
-                  tagBox(_tagController),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: bottomBtn(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: writePageAppbar(
           context: context,
+          appBarFlag: false,
           contentController: _contentController,
           tagController: _tagController,
-          bottomPadding: bottomPadding),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                decoration: const BoxDecoration(color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: imgContainer(
+                    multiImageFlag: widget.multiImageFlag,
+                    selectedImage: widget.selectedImage,
+                    selectedImages: widget.selectedImages,
+                    screenHeight: screenHeight,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      ContentsBox(
+                          contentController: _contentController,
+                          screenHeight: screenHeight),
+                      tagBox(_tagController),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: bottomBtn(
+          context: context,
+          contentValue: _contentController.text,
+          tagValue: _tagController.text,
+          bottomPadding: bottomPadding,
+          formKey: _formKey,
+        ),
+      ),
     );
   }
 }
