@@ -25,6 +25,7 @@ class WritePage extends StatefulWidget {
 class _WritePageState extends State<WritePage> {
   final _contentController = TextEditingController();
   final _tagController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -70,23 +71,28 @@ class _WritePageState extends State<WritePage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    contentsBox(
-                        contentController: _contentController,
-                        screenHeight: screenHeight),
-                    tagBox(_tagController),
-                  ],
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      ContentsBox(
+                          contentController: _contentController,
+                          screenHeight: screenHeight),
+                      tagBox(_tagController),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
         ),
         bottomNavigationBar: bottomBtn(
-            context: context,
-            contentValue: _contentController.text,
-            tagValue: _tagController.text,
-            bottomPadding: bottomPadding),
+          context: context,
+          contentValue: _contentController.text,
+          tagValue: _tagController.text,
+          bottomPadding: bottomPadding,
+          formKey: _formKey,
+        ),
       ),
     );
   }
