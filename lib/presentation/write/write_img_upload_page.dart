@@ -180,10 +180,24 @@ class _UploadPageState extends State<UploadPage> {
                       return Lottie.asset('assets/loading2.json');
                     }
                     if (snapshot.hasData && snapshot.data != null) {
-                      return Image.file(
-                        snapshot.data!,
-                        fit: BoxFit.cover,
-                      );
+                      final isSelected = selectedImage != null &&
+                          selectedImage?.id == asset.id;
+
+                      return isSelected
+                          ? Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Theme.of(context).primaryColor,
+                                      width: 4)),
+                              child: Image.file(
+                                snapshot.data!,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Image.file(
+                              snapshot.data!,
+                              fit: BoxFit.cover,
+                            );
                     }
                     // FutureBuilder에서 파일이 없거나 snapshot.data가 null일 때 아무런 UI를 표시하지 않도록 설정
                     return const SizedBox.shrink();
