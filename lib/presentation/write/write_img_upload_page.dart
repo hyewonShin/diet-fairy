@@ -1,12 +1,15 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:diet_fairy/presentation/write/common_widgets/img_container.dart';
 import 'package:diet_fairy/presentation/write/common_widgets/write_page_appbar.dart';
-import 'package:diet_fairy/presentation/write/write_img_upload_widgets/camera_icon.dart.dart';
 import 'package:diet_fairy/presentation/write/write_img_upload_widgets/header.dart';
-import 'package:diet_fairy/presentation/write/write_img_upload_widgets/photo_library_icon.dart';
+import 'package:diet_fairy/presentation/write/yolo_detection.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:yolo_helper/yolo_helper.dart';
+import 'package:image/image.dart' as img;
 
 class UploadPage extends StatefulWidget {
   const UploadPage({super.key});
@@ -20,10 +23,20 @@ class _UploadPageState extends State<UploadPage> {
   List<AssetEntity> selectedImages = [];
   AssetEntity? selectedImage;
   bool multiImageFlag = false;
+  bool isPerson = false;
+
+  // yolo
+  final YoloDetection model = YoloDetection();
+  final ImagePicker picker = ImagePicker();
+  List<DetectedObject>? detectedObjects;
+  Uint8List? imageBytes;
+  int? imageWidth;
+  int? imageHeight;
 
   @override
   void initState() {
     super.initState();
+    model.initialize();
     checkPermission();
   }
 
@@ -56,7 +69,42 @@ class _UploadPageState extends State<UploadPage> {
     final file = await asset.file;
     if (file != null) {
       setState(() {
+        //selectedImage 타입이 AssetEntity여서 file로 못 담음 => 생각해보기
+        //asset.file 과 asset 의 차이점 // asset 은 존재해도 asset.file은 존재하지 않을 수 있따?
         selectedImage = asset;
+      });
+      checkPersonImage(file);
+    }
+  }
+
+  // 이미지에 사람이 포함되는지 확인하는 메서드
+  void checkPersonImage(selectedImage) async {
+    bool foundPerson = false;
+
+    if (selectedImage != null) {
+      final bytes = await selectedImage.readAsBytes();
+      final image = img.decodeImage(bytes)!;
+      imageWidth = image.width;
+      imageHeight = image.height;
+
+      setState(() {
+        imageBytes = bytes;
+      });
+
+      detectedObjects = model.runInference(image);
+    }
+
+    if (detectedObjects != null) {
+      for (var object in detectedObjects!) {
+        final label = model.label(object.labelIndex);
+
+        if (label.contains('person')) {
+          foundPerson = true;
+          break;
+        }
+      }
+      setState(() {
+        isPerson = foundPerson;
       });
     }
   }
@@ -87,6 +135,7 @@ class _UploadPageState extends State<UploadPage> {
       appBar: writePageAppbar(
           context: context,
           appBarFlag: true,
+          isPerson: isPerson,
           multiImageFlag: multiImageFlag,
           selectedImage: selectedImage,
           selectedImages: selectedImages),
@@ -120,7 +169,10 @@ class _UploadPageState extends State<UploadPage> {
             itemBuilder: (context, index) {
               final asset = images[index];
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  if (!model.isInitialized) {
+                    return;
+                  }
                   multiImageFlag ? selectImages(asset) : selectImage(asset);
                 },
                 child: FutureBuilder<File?>(
