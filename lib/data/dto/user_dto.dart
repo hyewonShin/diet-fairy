@@ -13,10 +13,10 @@ class UserDto {
   List<DateTime>? feedCreatedAt;
 
   /// 유저 현재 몸무게
-  int? weight;
+  int weight;
 
   /// 유저 목표 몸무게
-  int? desiredWeight;
+  int desiredWeight;
 
   /// 유저가 좋아요 한 게시물 id
   List<int>? likeFeed;

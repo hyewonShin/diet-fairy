@@ -1,14 +1,17 @@
 import 'package:diet_fairy/presentation/home/home_page.dart';
+import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/presentation/widgets/id_text_field.dart';
 import 'package:diet_fairy/presentation/widgets/pw_text_field.dart';
+import 'package:diet_fairy/util/dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final idController = TextEditingController();
   final pwController = TextEditingController();
@@ -45,33 +48,45 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     height: 60,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState?.validate() ?? false) {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return HomePage();
-                              },
-                            ),
-                            // HomePage 로 넘어갈 때 이전 stack 에 쌓인 모든 페이지 지움
-                            (route) => false,
+                          final vm =
+                              ref.read(userGlobalViewModelProvider.notifier);
+                          final result = await vm.login(
+                            email: idController.text,
+                            password: pwController.text,
                           );
+
+                          // 로그인 성공
+                          if (result == null) {
+                            final user =
+                                ref.watch(userGlobalViewModelProvider)!;
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return HomePage(user);
+                                },
+                              ),
+                              // HomePage 로 넘어갈 때 이전 stack 에 쌓인 모든 페이지 지움
+                              (route) => false,
+                            );
+                          } else {
+                            await customCupertinoDialog(
+                              context: context,
+                              title: null,
+                              content: result,
+                            );
+                          }
                         }
                       },
-                      child: Text(
+                      child: const Text(
                         '로그인',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        backgroundColor: Colors.blue,
                       ),
                     ),
                   ),

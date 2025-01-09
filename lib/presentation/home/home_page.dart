@@ -1,3 +1,4 @@
+import 'package:diet_fairy/domain/entity/user.dart';
 import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
 import 'package:diet_fairy/presentation/home/home_view_model.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_popup_menu_button.dart';
@@ -5,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomePage extends ConsumerStatefulWidget {
+  User user;
+  HomePage(this.user);
+
   @override
   ConsumerState<HomePage> createState() => _HomePageState();
 }
