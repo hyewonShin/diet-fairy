@@ -26,8 +26,22 @@ class UserDataSourceImpl implements UserDataSource {
   }
 
   @override
-  Future<UserDto> getUser(String userId) {
-    // TODO: implement getUser
-    throw UnimplementedError();
+  Future<UserDto?> getUser(String userId) async {
+    try {
+      return await _collection.doc(userId).get().then((doc) {
+        final map = doc.data();
+
+        if (map != null) {
+          // userId 설정
+          map['userId'] = userId;
+          return UserDto.fromJson(map);
+        } else {
+          return null;
+        }
+      }, onError: (e) => print('getUser error: $e'));
+    } catch (e) {
+      print('getUser error: $e');
+    }
+    return null;
   }
 }

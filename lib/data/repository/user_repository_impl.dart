@@ -1,6 +1,6 @@
 import 'package:diet_fairy/data/data_source/user_data_source.dart';
 import 'package:diet_fairy/domain/repository/user_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:diet_fairy/domain/entity/user.dart';
 
 class UserRepositoryImpl implements UserRepository {
   UserRepositoryImpl(this._userDataSource);
@@ -13,9 +13,21 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<User> getUser(String userId) {
-    // TODO: implement getUser
-    throw UnimplementedError();
+  Future<User?> getUser(String userId) async {
+    final userDto = await _userDataSource.getUser(userId);
+
+    if (userDto != null) {
+      return User(
+        userId: userDto.userId,
+        nickname: userDto.nickname,
+        imageUrl: userDto.imageUrl,
+        feedCreatedAt: userDto.feedCreatedAt,
+        weight: userDto.weight,
+        desiredWeight: userDto.desiredWeight,
+        likeFeed: userDto.likeFeed,
+      );
+    } else {
+      return null;
+    }
   }
-  //
 }
