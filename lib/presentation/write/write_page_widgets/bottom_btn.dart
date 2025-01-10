@@ -1,3 +1,4 @@
+import 'package:diet_fairy/presentation/home/home_page.dart';
 import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/presentation/write/write_view_model.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,8 @@ import 'package:photo_manager/photo_manager.dart';
 
 Widget bottomBtn({
   required context,
-  required String contentValue,
-  required List<String> tagValue,
+  required TextEditingController contentController,
+  required TextEditingController tagController,
   AssetEntity? selectedImage,
   List<AssetEntity>? selectedImages,
   required WidgetRef ref, // 추가: ref를 통해 상태 관리
@@ -22,6 +23,8 @@ Widget bottomBtn({
     ),
     child: ElevatedButton(
       onPressed: () async {
+        final user = ref.read(userGlobalViewModelProvider);
+
         if (formKey.currentState?.validate() ?? false) {
           List<String> imagePaths = [];
 
@@ -41,15 +44,29 @@ Widget bottomBtn({
             }
           }
 
-          ref
-              .read(
-                writeViewModelProvider.notifier,
-              )
-              .addFeed(
-                contentValue,
-                tagValue,
-                imagePaths,
-              );
+          try {
+            // 데이터 삽입 작업 완료까지 대기
+            await ref.read(writeViewModelProvider.notifier).addFeed(
+                  contentController.text,
+                  [tagController.text],
+                  imagePaths,
+                );
+
+            // 삽입 작업이 성공적으로 완료되면 컨트롤러 초기화
+            contentController.clear();
+            tagController.clear();
+
+            // 홈 화면으로 이동
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(user!),
+              ),
+              (route) => false, // 뒤로가기 스택을 모두 제거
+            );
+          } catch (e) {
+            print('데이터 삽입 중 오류 발생: $e');
+          }
         } else {
           print('폼이 유효하지 않음');
         }

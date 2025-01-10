@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:diet_fairy/data/data_source/feed_data_source.dart';
-import 'package:diet_fairy/data/dto/feed_dto.dart';
 import 'package:diet_fairy/domain/entity/feed.dart';
 import 'package:diet_fairy/domain/entity/user.dart';
 import 'package:diet_fairy/domain/repository/feed_repository.dart';
