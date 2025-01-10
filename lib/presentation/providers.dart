@@ -13,6 +13,7 @@ import 'package:diet_fairy/domain/usecase/fetch_more_feed_usecase.dart';
 import 'package:diet_fairy/domain/usecase/join_usecase.dart';
 import 'package:diet_fairy/domain/usecase/login_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
 
 final _firebase = FirebaseFirestore.instance;
 
@@ -76,3 +77,33 @@ final addFeedUsecaseProvider = Provider<AddFeedUseCase>(
     return AddFeedUseCase(feedRepo);
   },
 );
+
+// Comment 관련 Providers
+final currentFeedIdProvider = Provider<int>((ref) {
+  throw UnimplementedError('currentFeedIdProvider not implemented');
+});
+
+final commentExpandedProvider = StateProvider<bool>((ref) => false);
+
+// Comment Provider Widget
+class CommentProvider extends ConsumerWidget {
+  final int feedId;
+  final Widget child;
+
+  const CommentProvider({
+    super.key,
+    required this.feedId,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ProviderScope(
+      overrides: [
+        currentFeedIdProvider.overrideWithValue(feedId),
+      ],
+      child: child,
+    );
+  }
+}
+

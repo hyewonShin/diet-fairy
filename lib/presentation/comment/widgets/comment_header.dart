@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class CommentHeader extends StatelessWidget {
   final int commentCount;
+  final VoidCallback onClose;
 
   const CommentHeader({
     super.key,
     required this.commentCount,
+    required this.onClose,
   });
 
   @override

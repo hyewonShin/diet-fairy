@@ -6,7 +6,7 @@ class GetCommentsUseCase {
 
   GetCommentsUseCase(this.repository);
 
-  Future<List<Comment>> execute() {
-    return repository.getComments();
+  Future<List<Comment>> execute(int feedId) {
+    return repository.getComments(feedId);
   }
 }
