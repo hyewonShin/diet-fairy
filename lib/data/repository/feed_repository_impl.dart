@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:diet_fairy/data/data_source/feed_data_source.dart';
+import 'package:diet_fairy/data/dto/feed_dto.dart';
 import 'package:diet_fairy/domain/entity/feed.dart';
+import 'package:diet_fairy/domain/entity/user.dart';
 import 'package:diet_fairy/domain/repository/feed_repository.dart';
 
 class FeedRepositoryImpl implements FeedRepository {
@@ -61,15 +63,14 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
-  Future<void> addFeed(Feed feed, List<File> images) async {
+  Future<void> addFeed(
+    User user,
+    String content,
+    List<String> tag,
+    List<String> images,
+  ) async {
     try {
-      // Feed -> FeedDto 변환
-      final feedDto = feed.toDto();
-
-      // FeedDto와 이미지를 dataSource에 전달
-      await _feedDataSource.addFeed(feedDto, images);
-
-      print("Feed addFeed successfully");
+      await _feedDataSource.addFeed(user, content, tag, images);
     } catch (e) {
       print("Error in addFeed: $e");
     }

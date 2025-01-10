@@ -1,16 +1,15 @@
-import 'dart:io';
-
-import 'package:diet_fairy/domain/entity/feed.dart';
-import 'package:diet_fairy/presentation/providers.dart';
+import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/presentation/write/write_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 Widget bottomBtn({
   required context,
-  contentValue,
-  tagValue,
-  // selectedImage,
+  required String contentValue,
+  required List<String> tagValue,
+  AssetEntity? selectedImage,
+  List<AssetEntity>? selectedImages,
   required WidgetRef ref, // 추가: ref를 통해 상태 관리
   required double bottomPadding,
   required GlobalKey<FormState> formKey,
@@ -22,30 +21,38 @@ Widget bottomBtn({
       bottom: bottomPadding,
     ),
     child: ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         if (formKey.currentState?.validate() ?? false) {
-          Feed feed = Feed(
-            id: 'feedId',
-            userId: "userId",
-            userNickname: "userNickname",
-            userImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            imageUrl: ["https://picsum.photos/seed/picsum/200/300"],
-            tag: ["tag"],
-            content: "content",
-            createdAt: DateTime.now(),
-            likeCnt: 1,
-            isLike: true,
-          );
+          List<String> imagePaths = [];
 
-          List<File> images = [];
+          // 단일 이미지 AssetEntity -> List<String> 변환
+          if (selectedImage != null) {
+            final file = await selectedImage.file;
+            if (file != null) {
+              imagePaths.add(file.path); // 파일 경로 추출
+            }
+          }
 
-          final writeNotifier = ref.read(writeViewModelProvider.notifier);
-          writeNotifier.addFeed(feed, images);
+          // 다중 이미지 AssetEntity -> List<String> 변환
+          for (final asset in selectedImages ?? []) {
+            final file = await asset.file;
+            if (file != null) {
+              imagePaths.add(file.path); // 파일 경로 추출
+            }
+          }
+
+          ref
+              .read(
+                writeViewModelProvider.notifier,
+              )
+              .addFeed(
+                contentValue,
+                tagValue,
+                imagePaths,
+              );
         } else {
           print('폼이 유효하지 않음');
         }
-        print(contentValue);
-        print(tagValue);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.primary,
