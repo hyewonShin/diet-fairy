@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:diet_fairy/domain/entity/weight_record.dart';
-import 'package:diet_fairy/presentation/home/widgets/weight_header.dart';
-import 'package:diet_fairy/presentation/home/widgets/weight_calendar.dart';
+import 'package:diet_fairy/presentation/my/widgets/weight_header.dart';
+import 'package:diet_fairy/presentation/my/widgets/weight_calendar.dart';
 
 class HomeContent extends StatelessWidget {
   const HomeContent({super.key});

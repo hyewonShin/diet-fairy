@@ -1,4 +1,6 @@
 import 'package:diet_fairy/domain/entity/feed.dart';
+import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
+import 'package:diet_fairy/presentation/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -53,16 +55,27 @@ class HomeFeedContent extends StatelessWidget {
               const Spacer(),
 
               // 댓글 페이지 버튼
-              IconButton(
-                onPressed: () {
-                  // TODO: merge 하고 주석 해제
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //   builder: (context) {
-                  //     return CommentPage(feed.id);
-                  //   },
-                  // ));
-                },
-                icon: const Icon(Icons.comment_outlined),
+              // 댓글 보기 버튼 추가
+              Positioned(
+                right: 10,
+                bottom: MediaQuery.of(context).size.height * 0.2,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.comment_outlined,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => CommentProvider(
+                        feedId: feed.id,
+                        child: const CommentBottomSheet(),
+                      ),
+                    );
+                  },
+                ),
               )
             ],
           ),

@@ -4,14 +4,14 @@ import 'package:diet_fairy/presentation/home/home_view_model.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_feed_content.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_feed_image_page_view.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_popup_menu_button.dart';
+import 'package:diet_fairy/presentation/providers.dart';
 import 'package:diet_fairy/util/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
 class HomePage extends ConsumerStatefulWidget {
-  User user;
-  HomePage(this.user);
+  const HomePage(User user, {super.key});
 
   @override
   ConsumerState<HomePage> createState() => _HomePageState();

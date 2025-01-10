@@ -3,15 +3,19 @@ import 'package:diet_fairy/domain/entity/comment.dart';
 
 class CommentDto {
   final String id;
+  final int feedId;
   final String userId;
   final String userNickname;
+  final String? userImageUrl;
   final String content;
-  final DateTime createdAt;
+  final String createdAt;
 
   CommentDto({
     required this.id,
+    required this.feedId,
     required this.userId,
     required this.userNickname,
+    this.userImageUrl,
     required this.content,
     required this.createdAt,
   });
@@ -19,20 +23,24 @@ class CommentDto {
   factory CommentDto.fromJson(Map<String, dynamic> json) {
     return CommentDto(
       id: json['id'] as String,
+      feedId: json['feedId'] as int,
       userId: json['userId'] as String,
-      userNickname: json['userNickname'] as String,
+      userNickname: json['nickname'] as String,
+      userImageUrl: json['userImageUrl'] as String?,
       content: json['content'] as String,
-      createdAt: (json['createdAt'] as Timestamp).toDate(),
+      createdAt: (json['createdAt'] as Timestamp).toDate().toString(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'feedId': feedId,
       'userId': userId,
-      'userNickname': userNickname,
+      'nickname': userNickname,
+      'userImageUrl': userImageUrl,
       'content': content,
-      'createdAt': Timestamp.fromDate(createdAt),
+      'createdAt': FieldValue.serverTimestamp(),
     };
   }
 
@@ -40,8 +48,10 @@ class CommentDto {
   Comment toEntity() {
     return Comment(
       commentId: id.hashCode,
+      feedId: feedId,
       userId: userId,
       userNickname: userNickname,
+      userImageUrl: userImageUrl,
       content: content,
       createdAt: createdAt,
     );
@@ -51,8 +61,10 @@ class CommentDto {
   factory CommentDto.fromEntity(Comment comment) {
     return CommentDto(
       id: comment.commentId.toString(),
+      feedId: comment.feedId,
       userId: comment.userId,
       userNickname: comment.userNickname,
+      userImageUrl: comment.userImageUrl,
       content: comment.content,
       createdAt: comment.createdAt,
     );

@@ -65,6 +65,7 @@ class _CommentInputState extends ConsumerState<CommentInput> {
               if (content.isNotEmpty) {
                 ref.read(commentViewModelProvider.notifier).addComment(content);
                 _controller.clear();
+                print('Comment submitted: $content');
               }
             },
           ),

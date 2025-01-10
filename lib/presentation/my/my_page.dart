@@ -3,6 +3,9 @@ import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
 import 'package:diet_fairy/presentation/my/my_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:diet_fairy/presentation/my/widgets/my_app_bar.dart';
+import 'package:diet_fairy/presentation/home/home_page.dart';
+import 'package:diet_fairy/presentation/profile/profile_edit_page.dart';
 
 class MyPage extends ConsumerWidget {
   const MyPage({super.key});
@@ -11,7 +14,34 @@ class MyPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(myViewModelProvider);
 
+    if (state.isLoading || state.user == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
+      appBar: MyAppBar(
+        user: state.user!,
+        onProfileTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfileEditPage(user: state.user!),
+            ),
+          );
+        },
+        onHomeTap: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(state.user!),
+            ),
+          );
+        },
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -67,6 +97,7 @@ class MyPage extends ConsumerWidget {
                           showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
+                            enableDrag: true,
                             backgroundColor: Colors.transparent,
                             builder: (context) => const CommentBottomSheet(),
                           );

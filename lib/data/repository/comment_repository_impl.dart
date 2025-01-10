@@ -6,15 +6,14 @@ class CommentRepositoryImpl implements CommentRepository {
   final FirebaseCommentDataSource _dataSource;
 
   CommentRepositoryImpl(this._dataSource);
-
   @override
-  Future<List<Comment>> getComments() async {
-    final dtos = await _dataSource.getComments();
+  Future<List<Comment>> getComments(int feedId) async {
+    final dtos = await _dataSource.getComments(feedId);
     return dtos.map((dto) => dto.toEntity()).toList();
   }
 
   @override
-  Future<void> addComment(String content) async {
-    await _dataSource.addComment(content);
+  Future<void> addComment(int feedId, String content) async {
+    await _dataSource.addComment(feedId.toString(), content);
   }
 }

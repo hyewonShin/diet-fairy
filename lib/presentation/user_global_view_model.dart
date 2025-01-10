@@ -36,6 +36,10 @@ class UserGlobalViewModel extends Notifier<User?> {
 
     return result.failResult;
   }
+
+  void updateUser(User user) {
+    state = user;
+  }
 }
 
 final userGlobalViewModelProvider =
