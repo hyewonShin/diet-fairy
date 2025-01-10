@@ -1,4 +1,5 @@
 import 'package:diet_fairy/presentation/home/home_page.dart';
+import 'package:diet_fairy/presentation/join/join_page.dart';
 import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/presentation/widgets/id_text_field.dart';
 import 'package:diet_fairy/presentation/widgets/pw_text_field.dart';
@@ -28,7 +29,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ListView(
                 children: [
-                  const Text('로그인 해주세요', style: TextStyle(fontSize: 25)),
+                  const SizedBox(height: 20),
+                  const Text('다이어트 요정님 어서오세요', style: TextStyle(fontSize: 25)),
+                  const Text('로그인하고 다른 요정들의\n다이어트 팁을 놓치지 마세요!',
+                      style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 20),
 
                   // 아이디
@@ -41,7 +45,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   const Text('비밀번호'),
                   const SizedBox(height: 3),
                   PwTextField(pwController),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 30),
+
+                  // 회원가입 페이지 이동 버튼
+                  _moveToJoin(context),
+                  const SizedBox(height: 2),
 
                   // 로그인 버튼
                   Container(
@@ -96,6 +104,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  TextButton _moveToJoin(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return JoinPage();
+          },
+        ));
+      },
+      child: const Text(
+        '아직 요정이 아니시라면 서둘러 회원가입을 해주세요!',
+        style: TextStyle(fontSize: 15),
       ),
     );
   }
