@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:diet_fairy/data/data_source/feed_data_source.dart';
 import 'package:diet_fairy/domain/entity/feed.dart';
 import 'package:diet_fairy/domain/repository/feed_repository.dart';
@@ -56,5 +58,20 @@ class FeedRepositoryImpl implements FeedRepository {
         );
       },
     ).toList();
+  }
+
+  @override
+  Future<void> addFeed(Feed feed, List<File> images) async {
+    try {
+      // Feed -> FeedDto 변환
+      final feedDto = feed.toDto();
+
+      // FeedDto와 이미지를 dataSource에 전달
+      await _feedDataSource.addFeed(feedDto, images);
+
+      print("Feed addFeed successfully");
+    } catch (e) {
+      print("Error in addFeed: $e");
+    }
   }
 }
