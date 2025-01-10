@@ -24,7 +24,7 @@ class HomeFeedContent extends StatelessWidget {
       duration: const Duration(microseconds: 1),
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white10,
+        color: selected ? Colors.white70 : Colors.white10,
         borderRadius: BorderRadius.circular(30),
       ),
       child: ListView(
@@ -48,34 +48,29 @@ class HomeFeedContent extends StatelessWidget {
                     ),
                   ),
                   // 게시물 날짜
-                  Text(DateFormat('y년 M월 d일').format(feed.createdAt)),
+                  Text(DateFormat('y년 M월 d일 EEE').format(feed.createdAt)),
                 ],
               ),
 
               const Spacer(),
 
-              // 댓글 페이지 버튼
               // 댓글 보기 버튼 추가
-              Positioned(
-                right: 10,
-                bottom: MediaQuery.of(context).size.height * 0.2,
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.comment_outlined,
-                    size: 30,
-                  ),
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) => CommentProvider(
-                        feedId: feed.id,
-                        child: const CommentBottomSheet(),
-                      ),
-                    );
-                  },
+              IconButton(
+                icon: const Icon(
+                  Icons.comment_outlined,
+                  size: 30,
                 ),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => CommentProvider(
+                      feedId: feed.id,
+                      child: const CommentBottomSheet(),
+                    ),
+                  );
+                },
               )
             ],
           ),
@@ -89,18 +84,7 @@ class HomeFeedContent extends StatelessWidget {
           ),
 
           // 게시물 태그
-          // TODO: 주석 해제해야함...
-          // Expanded(
-          //   child: ListView.separated(
-          //     scrollDirection: Axis.horizontal,
-          //     itemCount: feed.tag!.length,
-          //     separatorBuilder: (context, index) => const SizedBox(width: 5),
-          //     itemBuilder: (context, index) {
-          //       final tag = feed.tag![index];
-          //       return Text('#$tag');
-          //     },
-          //   ),
-          // )
+          Text(_tagList(feed.tag!)),
         ],
       ),
     );
@@ -117,5 +101,13 @@ class HomeFeedContent extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _tagList(List<String> tags) {
+    String t = '';
+    for (var tag in tags) {
+      t += '#$tag ';
+    }
+    return t.trimRight();
   }
 }
