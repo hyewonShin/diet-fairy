@@ -46,8 +46,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
           // 마지막 페이지일 경우 추가 피드를 가져온다
           if (page + 1 == state.feeds!.length) {
-            final lastFeedId = feed.id;
-            final result = await vm.moreFetch(lastFeedId);
+            final result = await vm.moreFetch(feed.createdAt);
 
             if (result != null) {
               // TODO: 마지막 게시글일 때 dialog 띄우는 건데 현재 동작 안함 개선 필요

@@ -3,7 +3,7 @@ import 'package:diet_fairy/domain/entity/comment.dart';
 
 class CommentDto {
   final String id;
-  final int feedId;
+  final String feedId;
   final String userId;
   final String userNickname;
   final String? userImageUrl;
@@ -23,7 +23,7 @@ class CommentDto {
   factory CommentDto.fromJson(Map<String, dynamic> json) {
     return CommentDto(
       id: json['id'] as String,
-      feedId: json['feedId'] as int,
+      feedId: json['feedId'],
       userId: json['userId'] as String,
       userNickname: json['nickname'] as String,
       userImageUrl: json['userImageUrl'] as String?,

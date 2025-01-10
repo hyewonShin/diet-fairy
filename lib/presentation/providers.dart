@@ -79,7 +79,7 @@ final addFeedUsecaseProvider = Provider<AddFeedUseCase>(
 );
 
 // Comment 관련 Providers
-final currentFeedIdProvider = Provider<int>((ref) {
+final currentFeedIdProvider = Provider<String>((ref) {
   throw UnimplementedError('currentFeedIdProvider not implemented');
 });
 
@@ -87,7 +87,7 @@ final commentExpandedProvider = StateProvider<bool>((ref) => false);
 
 // Comment Provider Widget
 class CommentProvider extends ConsumerWidget {
-  final int feedId;
+  final String feedId;
   final Widget child;
 
   const CommentProvider({
@@ -106,4 +106,3 @@ class CommentProvider extends ConsumerWidget {
     );
   }
 }
-

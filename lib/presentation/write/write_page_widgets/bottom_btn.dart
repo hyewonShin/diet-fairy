@@ -25,7 +25,7 @@ Widget bottomBtn({
       onPressed: () {
         if (formKey.currentState?.validate() ?? false) {
           Feed feed = Feed(
-            id: 1,
+            id: 'feedId',
             userId: "userId",
             userNickname: "userNickname",
             userImageUrl: "https://picsum.photos/seed/picsum/200/300",
