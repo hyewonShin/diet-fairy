@@ -13,6 +13,9 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
+  // 스플래쉬 3초 대기
+  await Future.delayed(const Duration(seconds: 3));
+
   // 첫번째 함수에서 발생하는 모든 에러를 두번째 함수에서 처리함
   runZonedGuarded(
     () async {
