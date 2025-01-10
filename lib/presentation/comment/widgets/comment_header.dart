@@ -24,10 +24,6 @@ class CommentHeader extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.keyboard_arrow_down),
-            onPressed: onClose,
-          ),
         ],
       ),
     );
