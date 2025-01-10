@@ -2,7 +2,7 @@ import 'package:diet_fairy/data/dto/feed_dto.dart';
 
 class Feed {
   /// 게시물 id
-  int id;
+  String id;
 
   /// 게시물 올린 user 의 id
   String userId;

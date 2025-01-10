@@ -7,7 +7,7 @@ abstract interface class FeedDataSource {
   Future<List<FeedDto>?> getFeeds();
 
   /// 게시물 id 기준 최신 게시물 5개만 가져오는 api
-  Future<List<FeedDto>?> getMoreFeeds(int feedId);
+  Future<List<FeedDto>?> getMoreFeeds(DateTime feedCreatedAt);
 
   Future<void> addFeed(FeedDto feed, List<File> images);
 }

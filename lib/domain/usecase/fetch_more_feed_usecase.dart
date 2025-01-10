@@ -5,7 +5,7 @@ class FetchMoreFeedUsecase {
   FetchMoreFeedUsecase(this._feedRepo);
   final FeedRepository _feedRepo;
 
-  Future<List<Feed>?> execute(int feedId) async {
-    return await _feedRepo.getMoreFeeds(feedId);
+  Future<List<Feed>?> execute(DateTime feedCreatedAt) async {
+    return await _feedRepo.getMoreFeeds(feedCreatedAt);
   }
 }

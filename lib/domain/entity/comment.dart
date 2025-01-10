@@ -1,6 +1,6 @@
 class Comment {
   final int commentId;
-  final int feedId;
+  final String feedId;
   final String userId;
   final String userNickname;
   final String? userImageUrl;

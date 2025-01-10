@@ -35,8 +35,8 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
-  Future<List<Feed>?> getMoreFeeds(int feedId) async {
-    final feedDto = await _feedDataSource.getMoreFeeds(feedId);
+  Future<List<Feed>?> getMoreFeeds(DateTime feedCreatedAt) async {
+    final feedDto = await _feedDataSource.getMoreFeeds(feedCreatedAt);
 
     if (feedDto == null) {
       return null;

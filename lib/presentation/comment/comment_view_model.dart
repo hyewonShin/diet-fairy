@@ -39,7 +39,7 @@ final commentViewModelProvider =
 class CommentViewModel extends StateNotifier<CommentState> {
   final GetCommentsUseCase getCommentsUseCase;
   final AddCommentUseCase addCommentUseCase;
-  final int feedId;
+  final String feedId;
 
   CommentViewModel({
     required this.getCommentsUseCase,

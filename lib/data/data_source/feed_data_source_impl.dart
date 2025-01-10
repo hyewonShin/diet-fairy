@@ -15,9 +15,11 @@ class FeedDataSourceImpl implements FeedDataSource {
   @override
   Future<List<FeedDto>?> getFeeds() async {
     try {
-      // id 기준으로 내림차순하여 5개만 가져온다
-      final result =
-          await _collection.orderBy('id', descending: true).limit(5).get();
+      // 생성일 기준으로 최신순으로 5개만 가져온다
+      final result = await _collection
+          .orderBy('createdAt', descending: true)
+          .limit(5)
+          .get();
       return result.docs.map(
         (e) {
           return FeedDto.fromJson(e.data());
@@ -30,12 +32,12 @@ class FeedDataSourceImpl implements FeedDataSource {
   }
 
   @override
-  Future<List<FeedDto>?> getMoreFeeds(int feedId) async {
+  Future<List<FeedDto>?> getMoreFeeds(DateTime feedCreatedAt) async {
     try {
       // 마지막 게시물 id 기준 최신순으로 5개 가져온다
       final result = await _collection
-          .where('id', isLessThan: feedId)
-          .orderBy('id')
+          .where('createdAt', isLessThan: feedCreatedAt)
+          .orderBy('createdAt', descending: true)
           .limit(5)
           .get();
 

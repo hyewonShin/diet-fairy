@@ -9,7 +9,7 @@ class FirebaseCommentDataSource {
 
   FirebaseCommentDataSource(this.ref);
 
-  Future<List<CommentDto>> getComments(int feedId) async {
+  Future<List<CommentDto>> getComments(String feedId) async {
     try {
       print('Fetching comments for feedId: $feedId');
 
@@ -47,7 +47,7 @@ class FirebaseCommentDataSource {
       }
 
       final commentData = {
-        'feedId': int.parse(feedId),
+        'feedId': feedId,
         'userId': user.userId,
         'nickname': user.nickname,
         'userImageUrl': user.imageUrl,

@@ -5,7 +5,7 @@ class AddCommentUseCase {
 
   AddCommentUseCase(this.repository);
 
-  Future<void> execute(int feedId, String content) {
+  Future<void> execute(String feedId, String content) {
     return repository.addComment(feedId, content);
   }
 }

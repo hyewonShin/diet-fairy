@@ -7,13 +7,13 @@ class CommentRepositoryImpl implements CommentRepository {
 
   CommentRepositoryImpl(this._dataSource);
   @override
-  Future<List<Comment>> getComments(int feedId) async {
+  Future<List<Comment>> getComments(String feedId) async {
     final dtos = await _dataSource.getComments(feedId);
     return dtos.map((dto) => dto.toEntity()).toList();
   }
 
   @override
-  Future<void> addComment(int feedId, String content) async {
+  Future<void> addComment(String feedId, String content) async {
     await _dataSource.addComment(feedId.toString(), content);
   }
 }

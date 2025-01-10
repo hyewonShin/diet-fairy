@@ -34,9 +34,9 @@ class HomeViewModel extends Notifier<HomeState> {
     state = HomeState(feeds: feeds!, currentFeed: feeds.first);
   }
 
-  Future<String?> moreFetch(int feedId) async {
+  Future<String?> moreFetch(DateTime feedCreatedAt) async {
     final fetchMoreFeedUsecase = ref.read(fetchMoreFeedUsecaseProvider);
-    final moreFeeds = await fetchMoreFeedUsecase.execute(feedId);
+    final moreFeeds = await fetchMoreFeedUsecase.execute(feedCreatedAt);
 
     if (moreFeeds == null) {
       return '마지막 게시글입니다.';
