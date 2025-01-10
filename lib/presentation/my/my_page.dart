@@ -1,11 +1,12 @@
 import 'package:diet_fairy/domain/entity/weight_record.dart';
-import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
 import 'package:diet_fairy/presentation/my/my_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:diet_fairy/presentation/my/widgets/my_app_bar.dart';
 import 'package:diet_fairy/presentation/home/home_page.dart';
 import 'package:diet_fairy/presentation/profile/profile_edit_page.dart';
+import 'package:diet_fairy/presentation/my/widgets/weight_header.dart';
+import 'package:diet_fairy/presentation/evaluation/diet_evaluation_page.dart';
 
 class MyPage extends ConsumerWidget {
   const MyPage({super.key});
@@ -45,35 +46,9 @@ class MyPage extends ConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // 체중 표시 영역
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.blue[100],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              margin: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '목표 체중까지',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.blue[900],
-                    ),
-                  ),
-                  Text(
-                    '${state.weightGoal?.remainingWeight}kg 남았어요',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue[900],
-                    ),
-                  ),
-                ],
-              ),
+            WeightHeader(
+              currentWeight: state.user!.weight,
+              desiredWeight: state.user!.desiredWeight,
             ),
             // 캘린더 영역
             Padding(
@@ -81,34 +56,52 @@ class MyPage extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        '이번달 도전 일기',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  const Text(
+                    '이번달 도전 일기',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: Text(
+                      '${DateTime.now().month}월',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      // 댓글 보기 버튼 추가
-                      TextButton.icon(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            enableDrag: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => const CommentBottomSheet(),
-                          );
-                        },
-                        icon: const Icon(Icons.comment),
-                        label: const Text('댓글 보기'),
-                      ),
-                    ],
+                    ),
                   ),
                   const SizedBox(height: 16),
                   _buildCalendar(state.records),
+                  const SizedBox(height: 24), // 캘린더와 버튼 사이 여백
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DietEvaluationPage(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text(
+                        '오늘의 다이어트 평가하기',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -120,7 +113,7 @@ class MyPage extends ConsumerWidget {
 
   Widget _buildCalendar(List<WeightRecord> records) {
     final now = DateTime.now();
-    final daysInMonth = DateTime(now.year, now.month + 1, 0).day; // 현재 달의 총 일수
+    final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
 
     return GridView.builder(
       shrinkWrap: true,
@@ -129,7 +122,7 @@ class MyPage extends ConsumerWidget {
         crossAxisCount: 7,
         childAspectRatio: 1,
       ),
-      itemCount: daysInMonth, // 31 대신 실제 달의 일수 사용
+      itemCount: daysInMonth,
       itemBuilder: (context, index) {
         final day = index + 1;
         final hasRecord = records.any((record) =>
@@ -141,16 +134,26 @@ class MyPage extends ConsumerWidget {
           margin: const EdgeInsets.all(4),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: hasRecord ? Colors.blue.withOpacity(0.2) : null,
+            color: hasRecord ? Colors.blue.withOpacity(0.1) : null,
           ),
-          child: Center(
-            child: Text(
-              '$day',
-              style: TextStyle(
-                color: hasRecord ? Colors.blue[900] : Colors.grey[600],
-                fontWeight: hasRecord ? FontWeight.bold : null,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Text(
+                '$day',
+                style: TextStyle(
+                  color: hasRecord ? Colors.blue[900] : Colors.grey[600],
+                  fontWeight: hasRecord ? FontWeight.bold : null,
+                ),
               ),
-            ),
+              if (hasRecord)
+                Image.asset(
+                  'assets/fairy_stamp.png',
+                  width: 24,
+                  height: 24,
+                  opacity: const AlwaysStoppedAnimation(0.7),
+                ),
+            ],
           ),
         );
       },

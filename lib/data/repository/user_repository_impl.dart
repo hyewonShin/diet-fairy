@@ -24,7 +24,7 @@ class UserRepositoryImpl implements UserRepository {
         feedCreatedAt: userDto.feedCreatedAt,
         weight: userDto.weight,
         desiredWeight: userDto.desiredWeight,
-        likeFeed: userDto.likeFeed,
+        likeFeed: userDto.likeFeed?.map((e) => e.toString()).toList(),
       );
     } else {
       return null;

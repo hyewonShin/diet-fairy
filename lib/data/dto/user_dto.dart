@@ -65,7 +65,7 @@ class UserDto {
       feedCreatedAt: feedCreatedAt,
       weight: weight,
       desiredWeight: desiredWeight,
-      likeFeed: likeFeed,
+      likeFeed: likeFeed?.map((e) => e.toString()).toList(),
     );
   }
 
@@ -78,7 +78,7 @@ class UserDto {
       feedCreatedAt: user.feedCreatedAt,
       weight: user.weight,
       desiredWeight: user.desiredWeight,
-      likeFeed: user.likeFeed,
+      likeFeed: user.likeFeed?.map((e) => int.parse(e)).toList(),
     );
   }
 }

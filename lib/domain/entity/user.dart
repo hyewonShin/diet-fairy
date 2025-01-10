@@ -19,15 +19,35 @@ class User {
   int desiredWeight;
 
   /// 유저가 좋아요 한 게시물 id
-  List<int>? likeFeed;
+  List<String>? likeFeed;
 
   User({
     required this.userId,
     required this.nickname,
-    required this.imageUrl,
-    required this.feedCreatedAt,
+    this.imageUrl,
     required this.weight,
     required this.desiredWeight,
-    required this.likeFeed,
+    this.feedCreatedAt,
+    this.likeFeed,
   });
+
+  User copyWith({
+    String? userId,
+    String? nickname,
+    String? imageUrl,
+    int? weight,
+    int? desiredWeight,
+    List<DateTime>? feedCreatedAt,
+    List<String>? likeFeed,
+  }) {
+    return User(
+      userId: userId ?? this.userId,
+      nickname: nickname ?? this.nickname,
+      imageUrl: imageUrl ?? this.imageUrl,
+      weight: weight ?? this.weight,
+      desiredWeight: desiredWeight ?? this.desiredWeight,
+      feedCreatedAt: feedCreatedAt ?? this.feedCreatedAt,
+      likeFeed: likeFeed ?? this.likeFeed,
+    );
+  }
 }

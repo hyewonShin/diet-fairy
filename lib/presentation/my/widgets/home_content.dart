@@ -21,7 +21,7 @@ class HomeContent extends StatelessWidget {
 
     return Column(
       children: [
-        const WeightHeader(weight: 6),
+        const WeightHeader(currentWeight: 6, desiredWeight: 6),
         WeightCalendar(
           records: records,
           selectedMonth: DateTime(2024, 11),
