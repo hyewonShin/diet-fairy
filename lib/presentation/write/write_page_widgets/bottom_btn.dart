@@ -1,16 +1,16 @@
-import 'dart:io';
-
-import 'package:diet_fairy/domain/entity/feed.dart';
-import 'package:diet_fairy/presentation/providers.dart';
+import 'package:diet_fairy/presentation/home/home_page.dart';
+import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/presentation/write/write_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 Widget bottomBtn({
   required context,
-  contentValue,
-  tagValue,
-  // selectedImage,
+  required TextEditingController contentController,
+  required TextEditingController tagController,
+  AssetEntity? selectedImage,
+  List<AssetEntity>? selectedImages,
   required WidgetRef ref, // 추가: ref를 통해 상태 관리
   required double bottomPadding,
   required GlobalKey<FormState> formKey,
@@ -22,30 +22,54 @@ Widget bottomBtn({
       bottom: bottomPadding,
     ),
     child: ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
+        final user = ref.read(userGlobalViewModelProvider);
+
         if (formKey.currentState?.validate() ?? false) {
-          Feed feed = Feed(
-            id: 'feedId',
-            userId: "userId",
-            userNickname: "userNickname",
-            userImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            imageUrl: ["https://picsum.photos/seed/picsum/200/300"],
-            tag: ["tag"],
-            content: "content",
-            createdAt: DateTime.now(),
-            likeCnt: 1,
-            isLike: true,
-          );
+          List<String> imagePaths = [];
 
-          List<File> images = [];
+          // 단일 이미지 AssetEntity -> List<String> 변환
+          if (selectedImage != null) {
+            final file = await selectedImage.file;
+            if (file != null) {
+              imagePaths.add(file.path); // 파일 경로 추출
+            }
+          }
 
-          final writeNotifier = ref.read(writeViewModelProvider.notifier);
-          writeNotifier.addFeed(feed, images);
+          // 다중 이미지 AssetEntity -> List<String> 변환
+          for (final asset in selectedImages ?? []) {
+            final file = await asset.file;
+            if (file != null) {
+              imagePaths.add(file.path); // 파일 경로 추출
+            }
+          }
+
+          try {
+            // 데이터 삽입 작업 완료까지 대기
+            await ref.read(writeViewModelProvider.notifier).addFeed(
+                  contentController.text,
+                  [tagController.text],
+                  imagePaths,
+                );
+
+            // 삽입 작업이 성공적으로 완료되면 컨트롤러 초기화
+            contentController.clear();
+            tagController.clear();
+
+            // 홈 화면으로 이동
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(user!),
+              ),
+              (route) => false, // 뒤로가기 스택을 모두 제거
+            );
+          } catch (e) {
+            print('데이터 삽입 중 오류 발생: $e');
+          }
         } else {
           print('폼이 유효하지 않음');
         }
-        print(contentValue);
-        print(tagValue);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.primary,

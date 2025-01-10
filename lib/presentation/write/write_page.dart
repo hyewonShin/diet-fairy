@@ -15,7 +15,7 @@ class WritePage extends ConsumerStatefulWidget {
   const WritePage(
       {required this.multiImageFlag,
       this.selectedImage,
-      this.selectedImages,
+      required this.selectedImages,
       super.key});
 
   @override
@@ -89,9 +89,10 @@ class _WritePageState extends ConsumerState<WritePage> {
         bottomNavigationBar: bottomBtn(
           context: context,
           ref: ref,
-          // selectedImage: widget.selectedImage,
-          contentValue: contentController.text,
-          tagValue: tagController.text,
+          selectedImage: widget.selectedImage,
+          selectedImages: widget.selectedImages,
+          contentController: contentController,
+          tagController: tagController,
           bottomPadding: bottomPadding,
           formKey: _formKey,
         ),

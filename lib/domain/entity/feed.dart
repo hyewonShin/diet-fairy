@@ -45,20 +45,4 @@ class Feed {
     required this.likeCnt,
     required this.isLike,
   });
-
-  /// Feed -> FeedDto 변환
-  FeedDto toDto() {
-    return FeedDto(
-      id: id,
-      userId: userId,
-      userNickname: userNickname,
-      userImageUrl: userImageUrl,
-      imageUrl: imageUrl,
-      tag: tag,
-      content: content,
-      createdAt: createdAt,
-      likeCnt: likeCnt,
-      isLike: isLike,
-    );
-  }
 }

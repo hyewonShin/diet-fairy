@@ -1,4 +1,3 @@
-import 'package:diet_fairy/presentation/write/write_img_upload_widgets/camera_icon.dart.dart';
 import 'package:diet_fairy/presentation/write/write_img_upload_widgets/photo_library_icon.dart';
 import 'package:flutter/material.dart';
 
@@ -24,23 +23,14 @@ Widget header({required changeMultiImageFlag, required multiImageFlag}) {
           ),
         ],
       ),
-      Row(
-        children: [
-          GestureDetector(
-              onTap: () {
-                changeMultiImageFlag();
-              },
-              child: photoLibraryIcon(multiImageFlag: multiImageFlag)),
-          const SizedBox(
-            width: 3,
-          ),
-          GestureDetector(
-              onTap: () {
-                // 카메라 촬영
-              },
-              child: cameraIcon()),
-        ],
-      ),
+      GestureDetector(
+          onTap: () {
+            changeMultiImageFlag();
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: photoLibraryIcon(multiImageFlag: multiImageFlag),
+          )),
     ],
   );
 }
