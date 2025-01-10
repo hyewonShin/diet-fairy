@@ -4,10 +4,10 @@ import 'package:diet_fairy/presentation/write/common_widgets/img_container.dart'
 import 'package:diet_fairy/presentation/write/common_widgets/write_page_appbar.dart';
 import 'package:diet_fairy/presentation/write/write_page_widgets/tag_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-// Feed 엔티티 사용하여 데이터 맞춰서 firebase에 전송 해주기
-class WritePage extends StatefulWidget {
+class WritePage extends ConsumerStatefulWidget {
   final AssetEntity? selectedImage;
   final List<AssetEntity>? selectedImages;
   final bool multiImageFlag;
@@ -19,18 +19,18 @@ class WritePage extends StatefulWidget {
       super.key});
 
   @override
-  State<WritePage> createState() => _WritePageState();
+  ConsumerState<WritePage> createState() => _WritePageState();
 }
 
-class _WritePageState extends State<WritePage> {
-  final _contentController = TextEditingController();
-  final _tagController = TextEditingController();
+class _WritePageState extends ConsumerState<WritePage> {
+  final contentController = TextEditingController();
+  final tagController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    _contentController.dispose();
-    _tagController.dispose();
+    contentController.dispose();
+    tagController.dispose();
     super.dispose();
   }
 
@@ -51,8 +51,8 @@ class _WritePageState extends State<WritePage> {
         appBar: writePageAppbar(
           context: context,
           appBarFlag: false,
-          contentController: _contentController,
-          tagController: _tagController,
+          contentController: contentController,
+          tagController: tagController,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -76,9 +76,9 @@ class _WritePageState extends State<WritePage> {
                   child: Column(
                     children: [
                       ContentsBox(
-                          contentController: _contentController,
+                          contentController: contentController,
                           screenHeight: screenHeight),
-                      tagBox(_tagController),
+                      tagBox(tagController),
                     ],
                   ),
                 ),
@@ -88,8 +88,10 @@ class _WritePageState extends State<WritePage> {
         ),
         bottomNavigationBar: bottomBtn(
           context: context,
-          contentValue: _contentController.text,
-          tagValue: _tagController.text,
+          ref: ref,
+          // selectedImage: widget.selectedImage,
+          contentValue: contentController.text,
+          tagValue: tagController.text,
           bottomPadding: bottomPadding,
           formKey: _formKey,
         ),

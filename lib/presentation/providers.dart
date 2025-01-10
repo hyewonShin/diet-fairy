@@ -7,6 +7,7 @@ import 'package:diet_fairy/data/repository/feed_repository_impl.dart';
 import 'package:diet_fairy/data/repository/user_repository_impl.dart';
 import 'package:diet_fairy/domain/repository/feed_repository.dart';
 import 'package:diet_fairy/domain/repository/user_repository.dart';
+import 'package:diet_fairy/domain/usecase/add_feed_use_case.dart';
 import 'package:diet_fairy/domain/usecase/fetch_feed_usecase.dart';
 import 'package:diet_fairy/domain/usecase/fetch_more_feed_usecase.dart';
 import 'package:diet_fairy/domain/usecase/join_usecase.dart';
@@ -66,5 +67,12 @@ final fetchMoreFeedUsecaseProvider = Provider<FetchMoreFeedUsecase>(
   (ref) {
     final feedRepo = ref.read(_feedRespositoryProvider);
     return FetchMoreFeedUsecase(feedRepo);
+  },
+);
+
+final addFeedUsecaseProvider = Provider<AddFeedUseCase>(
+  (ref) {
+    final feedRepo = ref.read(_feedRespositoryProvider);
+    return AddFeedUseCase(feedRepo);
   },
 );
