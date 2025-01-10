@@ -38,7 +38,11 @@ class _JoinPageState extends ConsumerState<JoinPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ListView(
                 children: [
-                  const Text('환영합니다!', style: TextStyle(fontSize: 25)),
+                  const SizedBox(height: 20),
+                  const Text(
+                    '예비 다이어트 요정님 환영합니다!',
+                    style: TextStyle(fontSize: 25),
+                  ),
                   const SizedBox(height: 20),
 
                   // 아이디
@@ -82,15 +86,8 @@ class _JoinPageState extends ConsumerState<JoinPage> {
                               content: result,
                             );
                           } else {
-                            // 회원가입 성공
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return LoginPage();
-                                },
-                              ),
-                            );
+                            // 회원가입 성공 후 로그인 페이지도 이동
+                            Navigator.pop(context);
                           }
                         }
                       },
