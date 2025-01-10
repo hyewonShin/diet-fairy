@@ -52,6 +52,7 @@ dependencies:
       url: https://github.com/fhelper/flutter-yolo-helper.git
       ref: main
   intl: ^0.20.1
+  flutter_native_splash: ^2.4.4
 
 dev_dependencies:
   flutter_test:
@@ -106,3 +107,9 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 
+# flutter splash setting
+flutter_native_splash:
+  android: true
+  ios: true
+  color: "54A6FF"
+  image: "assets/splash-image.png"
