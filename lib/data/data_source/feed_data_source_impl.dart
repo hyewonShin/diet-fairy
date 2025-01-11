@@ -5,6 +5,7 @@ import 'package:diet_fairy/data/data_source/feed_data_source.dart';
 import 'package:diet_fairy/data/dto/feed_dto.dart';
 import 'package:diet_fairy/domain/entity/user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:intl/intl.dart';
 
 class FeedDataSourceImpl implements FeedDataSource {
   FeedDataSourceImpl(this._firestore);
@@ -84,13 +85,13 @@ class FeedDataSourceImpl implements FeedDataSource {
       }
       print('업로드된 이미지 URLs: $uploadedImageUrls');
 
-      // 2.1 Feed의 고유한 id 가져오기
-      final feedValue = await _collection.add({'userid': user.userId});
-      final feedId = feedValue.id;
+      // 2.1 Feed의 고유한 id 생성
+      String formattedDate =
+          DateFormat('yyyyMMddHHmmssSSS').format(DateTime.now());
 
       // 2.2 firebase에 저장할 DTO 데이터 생성
       final newFeed = FeedDto(
-        id: feedId,
+        id: formattedDate.toString(),
         userId: user.userId,
         userNickname: user.nickname,
         userImageUrl: user.imageUrl,
@@ -103,7 +104,7 @@ class FeedDataSourceImpl implements FeedDataSource {
       );
 
       // 2.3 Feed 객체를 Firestore에 저장
-      await _firestore.collection('Feed').doc(feedId).set(newFeed.toJson());
+      await _firestore.collection('Feed').add(newFeed.toJson());
       print("Feed uploaded successfully!");
     } catch (e) {
       print('FeedDataSourceImpl addFeeds error => $e');
