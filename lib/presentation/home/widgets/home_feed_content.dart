@@ -12,8 +12,8 @@ class HomeFeedContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: 왜 두번 호출되는지 확인...
-    print('feed ==> ${feed.id}');
-    print('feed.tag => ${feed.tag}');
+    // print('feed ==> ${feed.id}');
+    // print('feed.tag => ${feed.tag}');
 
     return AnimatedContainer(
       width: MediaQuery.of(context).size.width,
@@ -96,7 +96,7 @@ class HomeFeedContent extends StatelessWidget {
       width: 50,
       child: ClipOval(
         child: Image.asset(
-          'assets/no-user-image.png',
+          'assets/app/no-user-image.png',
           fit: BoxFit.cover,
         ),
       ),
