@@ -91,7 +91,12 @@ class _WeightEditPageState extends ConsumerState<WeightEditPage> {
                         desiredWeight: desiredWeight,
                       );
 
-                      await userViewModel.updateUser(updatedUser);
+                      print(
+                          'Updating weight - current: $currentWeight, desired: $desiredWeight');
+                      await ref
+                          .read(userGlobalViewModelProvider.notifier)
+                          .updateWeight(updatedUser);
+
                       ref.read(myViewModelProvider.notifier).refreshUserData();
                       Navigator.pop(context);
                     }

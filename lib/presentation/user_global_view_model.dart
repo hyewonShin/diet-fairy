@@ -37,20 +37,22 @@ class UserGlobalViewModel extends Notifier<User?> {
       if (result.failResult == null && result.user != null) {
         // Firestore에서 최신 사용자 정보 가져오기
         final userDoc = await FirebaseFirestore.instance
-            .collection('users')
+            .collection('user')
             .doc(result.user!.userId)
             .get();
 
         if (userDoc.exists) {
-          // 저장된 체중 정보 가져오기
+          // 저장된 정보 가져오기
           final weight = userDoc.data()?['weight'] as int? ?? 0;
           final desiredWeight = userDoc.data()?['desiredWeight'] as int? ?? 0;
+          final nickname = userDoc.data()?['nickname'] as String?;
 
           // 사용자 정보 업데이트
           state = result.user!.copyWith(
             weight: weight,
             desiredWeight: desiredWeight,
             imageUrl: userDoc.data()?['imageUrl'] as String?,
+            nickname: nickname ?? result.user!.nickname,
           );
         } else {
           state = result.user;
@@ -66,31 +68,52 @@ class UserGlobalViewModel extends Notifier<User?> {
 
   Future<void> updateUser(User user) async {
     try {
+      print('Updating user in Firebase - userId: ${user.userId}');
       final userRef =
-          FirebaseFirestore.instance.collection('users').doc(user.userId);
+          FirebaseFirestore.instance.collection('user').doc(user.userId);
 
-      // Firestore 업데이트
-      await userRef.update({
+      final updateData = {
+        'nickname': user.nickname,
         'weight': user.weight,
         'desiredWeight': user.desiredWeight,
         'imageUrl': user.imageUrl,
-      });
+      };
+      print('Update data: $updateData');
+
+      // 문서가 존재하는지 먼저 확인
+      final docSnapshot = await userRef.get();
+      if (!docSnapshot.exists) {
+        print('Document does not exist, creating new document');
+        await userRef.set(updateData);
+      } else {
+        print('Document exists, updating');
+        await userRef.update(updateData);
+      }
+
+      // 업데이트 후 데이터 확인
+      final updatedDoc = await userRef.get();
+      print('Updated document data: ${updatedDoc.data()}');
 
       // 로컬 상태 업데이트
       state = user;
-      print(
-          'User updated successfully - weight: ${user.weight}, desired: ${user.desiredWeight}');
-    } catch (e) {
+      print('User updated successfully in Firebase and local state');
+    } catch (e, stackTrace) {
       print('Error updating user: $e');
+      print('Stack trace: $stackTrace');
+      // Firebase 오류 상세 정보 출력
+      if (e is FirebaseException) {
+        print('Firebase error code: ${e.code}');
+        print('Firebase error message: ${e.message}');
+      }
     }
   }
 
   Future<void> updateProfileImage(String userId, String imagePath) async {
     try {
-      // Firebase Storage에 이미지 업로드
+      print('Updating profile image - userId: $userId');
       final file = File(imagePath);
       if (!file.existsSync()) {
-        print('Image file not found');
+        print('Image file not found at path: $imagePath');
         return;
       }
 
@@ -99,27 +122,63 @@ class UserGlobalViewModel extends Notifier<User?> {
           .child('profile_images')
           .child('$userId.jpg');
 
-      // 메타데이터 설정
-      final metadata = SettableMetadata(
-          contentType: 'image/jpeg',
-          customMetadata: {'picked-file-path': imagePath});
-
       // 파일 업로드
-      await storageRef.putFile(file, metadata);
+      await storageRef.putFile(file);
       final imageUrl = await storageRef.getDownloadURL();
+      print('Image uploaded, URL: $imageUrl');
 
-      // Firestore 사용자 문서 업데이트
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .update({'imageUrl': imageUrl});
+      // Firestore 업데이트
+      final userRef = FirebaseFirestore.instance.collection('user').doc(userId);
+      await userRef.update({
+        'imageUrl': imageUrl,
+      });
+      print('Image URL updated in Firestore');
 
       // 로컬 상태 업데이트
       if (state != null) {
         state = state!.copyWith(imageUrl: imageUrl);
+        print('Local state updated with new image URL');
       }
     } catch (e) {
       print('Error updating profile image: $e');
+    }
+  }
+
+  Future<void> updateWeight(User user) async {
+    try {
+      print('Updating weight in Firebase - userId: ${user.userId}');
+      final userRef =
+          FirebaseFirestore.instance.collection('user').doc(user.userId);
+
+      final updateData = {
+        'weight': user.weight,
+        'desiredWeight': user.desiredWeight,
+      };
+      print('Weight update data: $updateData');
+
+      // 문서가 존재하는지 먼저 확인
+      final docSnapshot = await userRef.get();
+      if (!docSnapshot.exists) {
+        print('Document does not exist, creating new document');
+        await userRef.set(updateData);
+      } else {
+        print('Document exists, updating');
+        await userRef.update(updateData);
+      }
+
+      // 업데이트 후 데이터 확인
+      final updatedDoc = await userRef.get();
+      print('Updated document data: ${updatedDoc.data()}');
+
+      // 로컬 상태 업데이트
+      state = user;
+      print('Weight updated successfully in Firebase');
+    } catch (e) {
+      print('Error updating weight: $e');
+      if (e is FirebaseException) {
+        print('Firebase error code: ${e.code}');
+        print('Firebase error message: ${e.message}');
+      }
     }
   }
 }

@@ -1,6 +1,4 @@
-import 'package:diet_fairy/domain/entity/weight_record.dart';
 import 'package:diet_fairy/presentation/my/my_view_model.dart';
-import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -151,32 +149,20 @@ class _DietEvaluationPageState extends ConsumerState<DietEvaluationPage> {
                     selectedDiet != null &&
                     selectedExercise != null
                 ? () async {
-                    final user = ref.read(userGlobalViewModelProvider);
-                    if (user != null) {
-                      // 현재 날짜의 기록 생성
-                      final record = WeightRecord(
-                        date: DateTime.now(),
-                        weight: user.weight,
-                        evaluation: {
-                          'mood': selectedMood!,
-                          'diet': selectedDiet!,
-                          'exercise': selectedExercise!,
-                        },
-                      );
+                    // MyViewModel을 통해 평가 저장
+                    await ref.read(myViewModelProvider.notifier).addEvaluation(
+                          selectedMood!,
+                          selectedDiet!,
+                          selectedExercise!,
+                        );
 
-                      // MyViewModel에 기록 추가
-                      await ref
-                          .read(myViewModelProvider.notifier)
-                          .addRecord(record);
-
-                      if (mounted) {
-                        Navigator.pop(context);
-                      }
+                    if (mounted) {
+                      Navigator.pop(context);
                     }
                   }
                 : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
             ),
             child: const Text(
