@@ -81,8 +81,8 @@ class FeedDataSourceImpl implements FeedDataSource {
         } catch (e) {
           print('이미지 업로드 중 오류 발생: $e');
         }
-        print('업로드된 이미지 URLs: $uploadedImageUrls');
       }
+      print('업로드된 이미지 URLs: $uploadedImageUrls');
 
       // 2.1 Feed의 고유한 id 가져오기
       final feedValue = await _collection.add({'userid': user.userId});

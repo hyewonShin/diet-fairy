@@ -50,7 +50,7 @@ Widget bottomBtn({
             await ref.read(writeViewModelProvider.notifier).addFeed(
                   contentController.text,
                   [tagController.text],
-                  imagePaths,
+                  imagePaths.toSet().toList(),
                 );
 
             // 삽입 작업이 성공적으로 완료되면 컨트롤러 초기화
