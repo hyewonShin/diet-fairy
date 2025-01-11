@@ -96,7 +96,7 @@ class HomeFeedContent extends StatelessWidget {
       width: 50,
       child: ClipOval(
         child: Image.asset(
-          'assets/no-user-image.png',
+          'assets/app/no-user-image.png',
           fit: BoxFit.cover,
         ),
       ),

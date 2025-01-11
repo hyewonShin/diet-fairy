@@ -5,7 +5,7 @@ showLogoAppbar() {
     title: Center(
       child: SizedBox(
         width: 130,
-        child: Image.asset('assets/text-logo2.png'),
+        child: Image.asset('assets/logo/text-logo2.png'),
       ),
     ),
   );
