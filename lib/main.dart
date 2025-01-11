@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Diet Fairy',
+      title: '다요정',
       theme: theme,
       home: LoginPage(),
     );
