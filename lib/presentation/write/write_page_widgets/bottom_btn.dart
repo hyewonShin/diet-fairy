@@ -1,4 +1,5 @@
 import 'package:diet_fairy/presentation/home/home_page.dart';
+import 'package:diet_fairy/presentation/home/home_view_model.dart';
 import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/presentation/write/write_view_model.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,9 @@ Widget bottomBtn({
             // 삽입 작업이 성공적으로 완료되면 컨트롤러 초기화
             contentController.clear();
             tagController.clear();
+
+            // 홈 피드 게시물 불러오기
+            await ref.read(homeViewModelProvider.notifier).fetch();
 
             // 홈 화면으로 이동
             Navigator.pushAndRemoveUntil(
