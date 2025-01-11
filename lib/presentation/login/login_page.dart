@@ -3,6 +3,7 @@ import 'package:diet_fairy/presentation/join/join_page.dart';
 import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/presentation/widgets/id_text_field.dart';
 import 'package:diet_fairy/presentation/widgets/pw_text_field.dart';
+import 'package:diet_fairy/util/appbar.dart';
 import 'package:diet_fairy/util/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,6 +23,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        appBar: showLogoAppbar(),
         body: SafeArea(
           child: Form(
             key: _formKey,
@@ -31,6 +33,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 children: [
                   const SizedBox(height: 20),
                   const Text('다이어트 요정님 어서오세요', style: TextStyle(fontSize: 25)),
+                  const SizedBox(height: 10),
                   const Text('로그인하고 다른 요정들의\n다이어트 팁을 놓치지 마세요!',
                       style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 20),
