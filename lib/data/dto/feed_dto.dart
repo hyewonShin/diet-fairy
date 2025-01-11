@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class FeedDto {
   /// 게시물 id
   String id;
@@ -53,7 +55,7 @@ class FeedDto {
           imageUrl: List.from(map['imageUrl']),
           tag: List.from(map['tag']),
           content: map['content'],
-          createdAt: DateTime.parse(map['createdAt']),
+          createdAt: (map['createdAt'] as Timestamp).toDate(),
           likeCnt: map['likeCnt'],
           isLike: map['isLike'],
         );
@@ -67,7 +69,7 @@ class FeedDto {
       'imageUrl': imageUrl,
       'tag': tag,
       'content': content,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': Timestamp.fromDate(createdAt),
       'likeCnt': likeCnt,
       'isLike': isLike,
     };

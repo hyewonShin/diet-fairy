@@ -1,8 +1,8 @@
 import 'package:diet_fairy/presentation/join/widgets/nickname_text_field.dart';
-import 'package:diet_fairy/presentation/login/login_page.dart';
 import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/presentation/widgets/id_text_field.dart';
 import 'package:diet_fairy/presentation/widgets/pw_text_field.dart';
+import 'package:diet_fairy/util/appbar.dart';
 import 'package:diet_fairy/util/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +31,7 @@ class _JoinPageState extends ConsumerState<JoinPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        appBar: showLogoAppbar(),
         body: SafeArea(
           child: Form(
             key: _formKey,
