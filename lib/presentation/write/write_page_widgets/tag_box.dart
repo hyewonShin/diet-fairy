@@ -13,10 +13,33 @@ class _ContentsBoxState extends State<TagBox> {
   bool isError = false;
   String? errorText;
 
+  final List<String> _tags = []; // 태그를 저장하는 리스트
+
   @override
   void setState(VoidCallback fn) {
     isError = widget.tagController.text.isNotEmpty;
     super.setState(fn);
+  }
+
+  void createTag(value) {
+    if (value.isNotEmpty && !value.startsWith('#')) {
+      // 사용자 입력이 '#'으로 시작하지 않으면 추가
+      widget.tagController.value = TextEditingValue(
+        text: '#$value',
+        selection: TextSelection.fromPosition(
+          TextPosition(offset: value.length + 1), // 커서를 올바른 위치로 이동
+        ),
+      );
+    }
+  }
+
+  void _addTag(String value) {
+    if (value.isNotEmpty) {
+      setState(() {
+        _tags.add(value); // 태그 리스트에 추가
+      });
+      widget.tagController.clear(); // 텍스트 필드 초기화
+    }
   }
 
   @override
@@ -42,7 +65,6 @@ class _ContentsBoxState extends State<TagBox> {
               keyboardType: TextInputType.multiline,
               maxLines: null,
               onChanged: (value) {
-                // 텍스트가 변경될 때마다 상태를 업데이트하여 테두리 색상 변경
                 setState(() {
                   if (value.trim().isEmpty) {
                     isError = true;
@@ -52,6 +74,7 @@ class _ContentsBoxState extends State<TagBox> {
                     errorText = null;
                   }
                 });
+                createTag(value);
               },
               validator: (value) {
                 if (value?.trim().isEmpty ?? true) {
