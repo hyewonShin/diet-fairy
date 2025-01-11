@@ -13,13 +13,6 @@ class ContentsBox extends StatefulWidget {
 
 class _ContentsBoxState extends State<ContentsBox> {
   bool isError = false;
-  String? errorText;
-
-  @override
-  void setState(VoidCallback fn) {
-    isError = widget.contentController.text.isNotEmpty;
-    super.setState(fn);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +42,19 @@ class _ContentsBoxState extends State<ContentsBox> {
                 setState(() {
                   if (value.trim().isEmpty) {
                     isError = true;
-                    errorText = '본문 내용을 입력해주세요.';
                   } else {
                     isError = false;
-                    errorText = null;
                   }
                 });
               },
               validator: (value) {
-                if (value?.trim().isEmpty ?? true) {
+                if (value == null || value.trim().isEmpty) {
                   setState(() {
                     isError = true;
                   });
+                  return ''; // 오류 메시지 숨김
                 }
-                return null;
+                return null; // 유효성 검사 통과
               },
             ),
           ),

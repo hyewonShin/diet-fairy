@@ -16,6 +16,37 @@ Widget bottomBtn({
   required double bottomPadding,
   required GlobalKey<FormState> formKey,
 }) {
+  void submitValue(imagePaths) async {
+    try {
+      // 데이터 삽입 작업 완료까지 대기
+      await ref.read(writeViewModelProvider.notifier).addFeed(
+            contentController.text,
+            [tagController.text],
+            imagePaths.toSet().toList(),
+          );
+
+      // 삽입 작업이 성공적으로 완료되면 컨트롤러 초기화
+      contentController.clear();
+      tagController.clear();
+
+      // 홈 피드 게시물 불러오기
+      await ref.read(homeViewModelProvider.notifier).fetch();
+
+      final user = ref.read(userGlobalViewModelProvider);
+
+      // 홈 화면으로 이동
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(user!),
+        ),
+        (route) => false, // 뒤로가기 스택을 모두 제거
+      );
+    } catch (e) {
+      print('데이터 삽입 중 오류 발생: $e');
+    }
+  }
+
   return Padding(
     padding: EdgeInsets.only(
       left: 20.0,
@@ -24,53 +55,23 @@ Widget bottomBtn({
     ),
     child: ElevatedButton(
       onPressed: () async {
-        final user = ref.read(userGlobalViewModelProvider);
-
-        if (formKey.currentState?.validate() ?? false) {
+        if (formKey.currentState?.validate() == true) {
           List<String> imagePaths = [];
 
-          // 단일 이미지 AssetEntity -> List<String> 변환
+          // 비동기 작업을 따로 실행
           if (selectedImage != null) {
             final file = await selectedImage.file;
             if (file != null) {
-              imagePaths.add(file.path); // 파일 경로 추출
+              imagePaths.add(file.path);
             }
           }
-
-          // 다중 이미지 AssetEntity -> List<String> 변환
           for (final asset in selectedImages ?? []) {
             final file = await asset.file;
             if (file != null) {
-              imagePaths.add(file.path); // 파일 경로 추출
+              imagePaths.add(file.path);
             }
           }
-
-          try {
-            // 데이터 삽입 작업 완료까지 대기
-            await ref.read(writeViewModelProvider.notifier).addFeed(
-                  contentController.text,
-                  [tagController.text],
-                  imagePaths.toSet().toList(),
-                );
-
-            // 삽입 작업이 성공적으로 완료되면 컨트롤러 초기화
-            contentController.clear();
-            tagController.clear();
-
-            // 홈 피드 게시물 불러오기
-            await ref.read(homeViewModelProvider.notifier).fetch();
-
-            // 홈 화면으로 이동
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomePage(user!),
-              ),
-              (route) => false, // 뒤로가기 스택을 모두 제거
-            );
-          } catch (e) {
-            print('데이터 삽입 중 오류 발생: $e');
-          }
+          submitValue(imagePaths);
         } else {
           print('폼이 유효하지 않음');
         }
