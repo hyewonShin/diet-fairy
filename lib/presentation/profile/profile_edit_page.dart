@@ -2,6 +2,7 @@ import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:diet_fairy/domain/entity/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileEditPage extends ConsumerStatefulWidget {
   final User user;
@@ -17,30 +18,43 @@ class ProfileEditPage extends ConsumerStatefulWidget {
 
 class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
   late TextEditingController _nicknameController;
-  late TextEditingController _weightController;
-  late TextEditingController _desiredWeightController;
 
   @override
   void initState() {
     super.initState();
     _nicknameController = TextEditingController(text: widget.user.nickname);
-    _weightController =
-        TextEditingController(text: widget.user.weight.toString());
-    _desiredWeightController =
-        TextEditingController(text: widget.user.desiredWeight.toString());
   }
 
   @override
   void dispose() {
     _nicknameController.dispose();
-    _weightController.dispose();
-    _desiredWeightController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 75,
+      );
+
+      if (image != null) {
+        print('Selected image path: ${image.path}');
+        await ref
+            .read(userGlobalViewModelProvider.notifier)
+            .updateProfileImage(widget.user.userId, image.path);
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final userViewModel = ref.watch(userGlobalViewModelProvider.notifier);
+    final user = ref.watch(userGlobalViewModelProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -50,84 +64,62 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Center(
+            // 프로필 이미지
+            GestureDetector(
+              onTap: _pickImage,
               child: Stack(
+                alignment: Alignment.bottomRight,
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: widget.user.imageUrl != null
-                        ? NetworkImage(widget.user.imageUrl!)
+                    backgroundImage: user?.imageUrl?.isNotEmpty == true
+                        ? NetworkImage(user!.imageUrl!)
                         : null,
-                    child: widget.user.imageUrl == null
+                    child: user?.imageUrl?.isNotEmpty != true
                         ? const Icon(Icons.person, size: 50)
                         : null,
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.blue,
-                      radius: 18,
-                      child: IconButton(
-                        icon: const Icon(Icons.camera_alt, size: 18),
-                        color: Colors.white,
-                        onPressed: () async {
-                          // 이미지 선택 및 업로드 로직
-                        },
-                      ),
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.blue,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.camera_alt,
+                      color: Colors.white,
+                      size: 20,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 32),
-            TextFormField(
+            const SizedBox(height: 16),
+            // 닉네임 입력 필드
+            TextField(
               controller: _nicknameController,
               decoration: const InputDecoration(
                 labelText: '닉네임',
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _weightController,
-              decoration: const InputDecoration(
-                labelText: '현재 체중',
-                border: OutlineInputBorder(),
-                suffixText: 'kg',
-              ),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _desiredWeightController,
-              decoration: const InputDecoration(
-                labelText: '목표 체중',
-                border: OutlineInputBorder(),
-                suffixText: 'kg',
-              ),
-              keyboardType: TextInputType.number,
-            ),
             const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  final updatedUser = User(
-                    userId: widget.user.userId,
-                    nickname: _nicknameController.text,
-                    imageUrl: widget.user.imageUrl,
-                    feedCreatedAt: widget.user.feedCreatedAt,
-                    weight: int.parse(_weightController.text),
-                    desiredWeight: int.parse(_desiredWeightController.text),
-                    likeFeed: widget.user.likeFeed,
-                  );
-
-                  // UserGlobalViewModel을 통해 사용자 정보 업데이트
-                  userViewModel.updateUser(updatedUser);
-                  Navigator.pop(context);
-                },
-                child: const Text('저장'),
+            // 저장 버튼
+            Padding(
+              padding: const EdgeInsets.only(bottom: 32.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // 닉네임 업데이트 로직
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('저장'),
+                ),
               ),
             ),
           ],
