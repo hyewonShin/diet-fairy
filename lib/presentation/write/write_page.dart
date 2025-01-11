@@ -78,7 +78,10 @@ class _WritePageState extends ConsumerState<WritePage> {
                       ContentsBox(
                           contentController: contentController,
                           screenHeight: screenHeight),
-                      tagBox(tagController),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      TagBox(tagController: tagController),
                     ],
                   ),
                 ),

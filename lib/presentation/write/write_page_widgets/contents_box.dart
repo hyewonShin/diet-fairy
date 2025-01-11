@@ -30,7 +30,7 @@ class _ContentsBoxState extends State<ContentsBox> {
           height: widget.screenHeight / 4,
           decoration: BoxDecoration(
               color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               border: isError
                   ? Border.all(color: Colors.red[200]!, width: 2)
                   : Border.all(color: Colors.transparent, width: 2)),
