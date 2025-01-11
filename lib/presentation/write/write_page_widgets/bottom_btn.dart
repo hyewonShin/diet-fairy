@@ -58,7 +58,6 @@ Widget bottomBtn({
         if (formKey.currentState?.validate() == true) {
           List<String> imagePaths = [];
 
-          // 비동기 작업을 따로 실행
           if (selectedImage != null) {
             final file = await selectedImage.file;
             if (file != null) {
