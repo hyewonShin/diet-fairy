@@ -27,6 +27,14 @@ class _WritePageState extends ConsumerState<WritePage> {
   final tagController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  List<String> _tags = [];
+
+  void _updateTags(List<String> tags) {
+    setState(() {
+      _tags = tags;
+    });
+  }
+
   @override
   void dispose() {
     contentController.dispose();
@@ -81,7 +89,10 @@ class _WritePageState extends ConsumerState<WritePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      TagBox(tagController: tagController),
+                      TagBox(
+                        tagController: tagController,
+                        onTagChanged: _updateTags,
+                      ),
                     ],
                   ),
                 ),
@@ -96,6 +107,7 @@ class _WritePageState extends ConsumerState<WritePage> {
           selectedImages: widget.selectedImages,
           contentController: contentController,
           tagController: tagController,
+          tags: _tags,
           bottomPadding: bottomPadding,
           formKey: _formKey,
         ),
