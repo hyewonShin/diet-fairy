@@ -3,6 +3,8 @@ import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:diet_fairy/domain/entity/weight_goal.dart';
 import 'package:diet_fairy/domain/entity/weight_record.dart';
+import 'package:diet_fairy/data/dto/diet_evaluation_dto.dart';
+import 'package:diet_fairy/data/data_source/firebase_diet_evaluation_data_source.dart';
 
 class MyState {
   final WeightGoal? weightGoal;
@@ -34,6 +36,7 @@ class MyState {
 
 class MyViewModel extends StateNotifier<MyState> {
   final Ref ref;
+  final _evaluationDataSource = FirebaseDietEvaluationDataSource();
 
   MyViewModel(this.ref)
       : super(
@@ -73,6 +76,68 @@ class MyViewModel extends StateNotifier<MyState> {
       );
     } catch (e) {
       print('Error adding record: $e');
+    }
+  }
+
+  Future<void> addEvaluation(String mood, String diet, String exercise) async {
+    try {
+      final user = ref.read(userGlobalViewModelProvider);
+      if (user == null) return;
+
+      final evaluation = DietEvaluationDto(
+        id: DateTime.now().toIso8601String(), // 또는 UUID 사용
+        userId: user.userId,
+        date: DateTime.now(),
+        mood: mood,
+        diet: diet,
+        exercise: exercise,
+      );
+
+      await _evaluationDataSource.addEvaluation(evaluation);
+
+      // 로컬 상태 업데이트
+      state = state.copyWith(
+        records: [
+          ...state.records,
+          WeightRecord(
+            date: evaluation.date,
+            weight: user.weight,
+            evaluation: {
+              'mood': mood,
+              'diet': diet,
+              'exercise': exercise,
+            },
+          ),
+        ],
+      );
+    } catch (e) {
+      print('Error adding evaluation: $e');
+    }
+  }
+
+  Future<void> loadMonthlyEvaluations() async {
+    try {
+      final user = ref.read(userGlobalViewModelProvider);
+      if (user == null) return;
+
+      final evaluations = await _evaluationDataSource.getMonthlyEvaluations(
+          user.userId, DateTime.now());
+
+      state = state.copyWith(
+        records: evaluations
+            .map((e) => WeightRecord(
+                  date: e.date,
+                  weight: user.weight,
+                  evaluation: {
+                    'mood': e.mood,
+                    'diet': e.diet,
+                    'exercise': e.exercise,
+                  },
+                ))
+            .toList(),
+      );
+    } catch (e) {
+      print('Error loading evaluations: $e');
     }
   }
 }

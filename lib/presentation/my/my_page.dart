@@ -8,11 +8,24 @@ import 'package:diet_fairy/presentation/profile/profile_edit_page.dart';
 import 'package:diet_fairy/presentation/my/widgets/weight_header.dart';
 import 'package:diet_fairy/presentation/evaluation/diet_evaluation_page.dart';
 
-class MyPage extends ConsumerWidget {
+class MyPage extends ConsumerStatefulWidget {
   const MyPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyPage> createState() => _MyPageState();
+}
+
+class _MyPageState extends ConsumerState<MyPage> {
+  @override
+  void initState() {
+    super.initState();
+    // 월간 평가 데이터 로드
+    Future.microtask(
+        () => ref.read(myViewModelProvider.notifier).loadMonthlyEvaluations());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(myViewModelProvider);
 
     if (state.isLoading || state.user == null) {
@@ -54,29 +67,49 @@ class MyPage extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '이번달 도전 일기',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text(
+                            '이번달 도전 일기',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Text(
+                            '${DateTime.now().month}월',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildCalendar(state.records),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: Text(
-                      '${DateTime.now().month}월',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildCalendar(state.records),
-                  const SizedBox(height: 24), // 캘린더와 버튼 사이 여백
+                  const SizedBox(height: 24),
+                  // 버튼은 배경색 밖으로 분리
                   SizedBox(
                     width: double.infinity,
                     height: 48,
@@ -121,7 +154,10 @@ class MyPage extends ConsumerWidget {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 7,
         childAspectRatio: 1,
+        mainAxisSpacing: 2,
+        crossAxisSpacing: 2,
       ),
+      padding: EdgeInsets.zero,
       itemCount: daysInMonth,
       itemBuilder: (context, index) {
         final day = index + 1;
@@ -131,28 +167,34 @@ class MyPage extends ConsumerWidget {
             record.date.day == day);
 
         return Container(
-          margin: const EdgeInsets.all(4),
+          margin: const EdgeInsets.all(0.5),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: hasRecord ? Colors.blue.withOpacity(0.1) : null,
+            color: hasRecord ? Colors.blue.withOpacity(0.05) : null,
           ),
           child: Stack(
+            fit: StackFit.expand,
             alignment: Alignment.center,
             children: [
-              Text(
-                '$day',
-                style: TextStyle(
-                  color: hasRecord ? Colors.blue[900] : Colors.grey[600],
-                  fontWeight: hasRecord ? FontWeight.bold : null,
+              if (hasRecord)
+                Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Image.asset(
+                    'assets/fairy_stamp.png',
+                    fit: BoxFit.contain,
+                    opacity: const AlwaysStoppedAnimation(1.0),
+                  ),
+                ),
+              Center(
+                child: Text(
+                  '$day',
+                  style: TextStyle(
+                    color: hasRecord ? Colors.blue[900] : Colors.grey[600],
+                    fontWeight: hasRecord ? FontWeight.bold : null,
+                    fontSize: 10,
+                  ),
                 ),
               ),
-              if (hasRecord)
-                Image.asset(
-                  'assets/fairy_stamp.png',
-                  width: 24,
-                  height: 24,
-                  opacity: const AlwaysStoppedAnimation(0.7),
-                ),
             ],
           ),
         );

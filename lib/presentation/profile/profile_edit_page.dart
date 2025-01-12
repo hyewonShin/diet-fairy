@@ -110,9 +110,31 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // 닉네임 업데이트 로직
-                    Navigator.pop(context);
+                  onPressed: () async {
+                    try {
+                      print('Save button pressed');
+                      final user = ref.read(userGlobalViewModelProvider);
+                      if (user != null) {
+                        print('Current user: ${user.nickname}');
+                        // 닉네임이 변경된 새로운 User 객체 생성
+                        final updatedUser = user.copyWith(
+                          nickname: _nicknameController.text,
+                        );
+                        print('Updated user: ${updatedUser.nickname}');
+
+                        // UserGlobalViewModel을 통해 업데이트
+                        await ref
+                            .read(userGlobalViewModelProvider.notifier)
+                            .updateUser(updatedUser);
+
+                        print('Update completed');
+                      }
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
+                    } catch (e) {
+                      print('Error saving profile changes: $e');
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
