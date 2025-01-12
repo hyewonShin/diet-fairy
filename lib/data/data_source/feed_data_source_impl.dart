@@ -109,4 +109,20 @@ class FeedDataSourceImpl implements FeedDataSource {
       return null;
     }
   }
+
+  @override
+  Future<void> deleteFeed(String feedId) async {
+    try {
+      final snapshot = await _collection.where('id', isEqualTo: feedId).get();
+
+      if (snapshot.docs.isNotEmpty) {
+        await snapshot.docs.first.reference.delete();
+        print('Document deleted successfully');
+      } else {
+        print('No document found with feedId: $feedId');
+      }
+    } catch (e) {
+      print('FeedDataSourceImpl deleteFeed error => $e');
+    }
+  }
 }

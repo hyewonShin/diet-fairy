@@ -2,9 +2,11 @@ import 'package:diet_fairy/domain/entity/user.dart';
 import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
 import 'package:diet_fairy/presentation/home/home_view_model.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_feed_content.dart';
+import 'package:diet_fairy/presentation/home/widgets/home_feed_delete_button.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_feed_image_page_view.dart';
 import 'package:diet_fairy/presentation/home/widgets/home_popup_menu_button.dart';
 import 'package:diet_fairy/presentation/providers.dart';
+import 'package:diet_fairy/presentation/user_global_view_model.dart';
 import 'package:diet_fairy/util/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,11 +59,21 @@ class _HomePageState extends ConsumerState<HomePage> {
         },
         itemBuilder: (context, feedIndex) {
           final feed = state.feeds![feedIndex];
+          final user = ref.read(userGlobalViewModelProvider);
 
           return Stack(
             children: [
               // 피드 사진
               HomeFeedImagePageView(feed),
+
+              // 본인이 작성한 피드에 삭제 버튼 생성
+              user!.userId == feed.userId
+                  ? Positioned(
+                      top: padding.top,
+                      left: 10,
+                      child: HomeFeedDeleteButton(feedId: feed.id),
+                    )
+                  : const SizedBox.shrink(),
 
               // 마이페이지, 글작성 페이지 이동하는 팝업 메뉴
               Positioned(

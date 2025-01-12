@@ -55,6 +55,12 @@ class HomeViewModel extends Notifier<HomeState> {
   void upateCurrentFeed(Feed feed) {
     state = state.copyWith(currentFeed: feed);
   }
+
+  Future<void> deleteFeed(String feedId) async {
+    final deleteFeedUseCase = ref.watch(deleteFeedUsecaseProvider);
+    await deleteFeedUseCase.execute(feedId);
+    await fetch();
+  }
 }
 
 final homeViewModelProvider = NotifierProvider<HomeViewModel, HomeState>(
