@@ -83,8 +83,6 @@ class FeedDataSourceImpl implements FeedDataSource {
           print('이미지 업로드 중 오류 발생: $e');
         }
       }
-      print('업로드된 이미지 URLs: $uploadedImageUrls');
-
       // 2.1 Feed의 고유한 id 생성
       String formattedDate =
           DateFormat('yyyyMMddHHmmssSSS').format(DateTime.now());

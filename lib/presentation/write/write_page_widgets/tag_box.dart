@@ -11,15 +11,8 @@ class TagBox extends StatefulWidget {
 
 class _ContentsBoxState extends State<TagBox> {
   bool isError = false;
-  String? errorText;
 
   final List<String> _tags = []; // 태그를 저장하는 리스트
-
-  @override
-  void setState(VoidCallback fn) {
-    isError = widget.tagController.text.isNotEmpty;
-    super.setState(fn);
-  }
 
   void createTag(value) {
     if (value.isNotEmpty && !value.startsWith('#')) {
@@ -63,26 +56,31 @@ class _ContentsBoxState extends State<TagBox> {
                 hintText: '태그 추가...',
               ),
               keyboardType: TextInputType.multiline,
-              maxLines: null,
+              maxLines: 1,
               onChanged: (value) {
+                // 텍스트가 변경될 때마다 상태를 업데이트하여 테두리 색상 변경
                 setState(() {
                   if (value.trim().isEmpty) {
                     isError = true;
-                    errorText = '태그 내용을 입력해주세요.';
                   } else {
                     isError = false;
-                    errorText = null;
                   }
                 });
                 createTag(value);
+                // 텍스트에서 스페이스바가 눌렸을 때 이벤트 처리
+                if (value.endsWith(' ')) {
+                  _tags.add(value);
+                  print(_tags);
+                }
               },
               validator: (value) {
-                if (value?.trim().isEmpty ?? true) {
+                if (value == null || value.trim().isEmpty) {
                   setState(() {
                     isError = true;
                   });
+                  return ''; // 오류 메시지 숨김
                 }
-                return null;
+                return null; // 유효성 검사 통과
               },
             ),
           ),
