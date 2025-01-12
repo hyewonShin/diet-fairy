@@ -72,4 +72,13 @@ class FeedRepositoryImpl implements FeedRepository {
       print("Error in addFeed: $e");
     }
   }
+
+  @override
+  Future<void> deleteFeed(String feedId) async {
+    try {
+      await _feedDataSource.deleteFeed(feedId);
+    } catch (e) {
+      print("Error in deleteFeed: $e");
+    }
+  }
 }

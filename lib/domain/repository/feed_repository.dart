@@ -12,4 +12,6 @@ abstract interface class FeedRepository {
     List<String> tag,
     List<String> images,
   );
+
+  Future<void> deleteFeed(String feedId);
 }
