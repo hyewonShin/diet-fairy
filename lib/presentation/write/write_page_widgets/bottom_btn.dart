@@ -10,6 +10,7 @@ Widget bottomBtn({
   required context,
   required TextEditingController contentController,
   required TextEditingController tagController,
+  required List<String> tags, // 태그 리스트 추가
   AssetEntity? selectedImage,
   List<AssetEntity>? selectedImages,
   required WidgetRef ref, // 추가: ref를 통해 상태 관리
@@ -21,7 +22,7 @@ Widget bottomBtn({
       // 데이터 삽입 작업 완료까지 대기
       await ref.read(writeViewModelProvider.notifier).addFeed(
             contentController.text,
-            [tagController.text],
+            tags,
             imagePaths.toSet().toList(),
           );
 
