@@ -94,12 +94,19 @@ class HomeFeedContent extends StatelessWidget {
     return SizedBox(
       height: 50,
       width: 50,
-      child: ClipOval(
-        child: Image.asset(
-          'assets/app/no-user-image.png',
-          fit: BoxFit.cover,
-        ),
-      ),
+      child: feed.userImageUrl == null || feed.userImageUrl!.isEmpty
+          ? ClipOval(
+              child: Image.asset(
+                'assets/app/no-user-image.png',
+                fit: BoxFit.cover,
+              ),
+            )
+          : ClipOval(
+              child: Image.network(
+                feed.userImageUrl!,
+                fit: BoxFit.cover,
+              ),
+            ),
     );
   }
 
