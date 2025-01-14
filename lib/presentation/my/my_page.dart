@@ -112,7 +112,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                 // 버튼
                 SizedBox(
                   width: double.infinity,
-                  height: 48,
+                  height: 60,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -122,15 +122,12 @@ class _MyPageState extends ConsumerState<MyPage> {
                         ),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                    ),
                     child: const Text(
                       '오늘의 다이어트 평가하기',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
                   ),

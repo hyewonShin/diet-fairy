@@ -77,7 +77,7 @@ class _WeightEditPageState extends ConsumerState<WeightEditPage> {
               padding: const EdgeInsets.only(bottom: 32.0),
               child: SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: 60,
                 child: ElevatedButton(
                   onPressed: () async {
                     if (user != null) {
@@ -101,16 +101,12 @@ class _WeightEditPageState extends ConsumerState<WeightEditPage> {
                       Navigator.pop(context);
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                  ),
                   child: const Text(
                     '설정하기',
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
               ),

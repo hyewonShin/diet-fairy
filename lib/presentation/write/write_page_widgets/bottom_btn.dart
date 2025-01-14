@@ -76,16 +76,6 @@ Widget bottomBtn({
           print('폼이 유효하지 않음');
         }
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.black,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        shadowColor: Colors.black,
-        elevation: 5, // 그림자 높이
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 10),
-      ),
       child: const Text(
         '공유',
         style: TextStyle(

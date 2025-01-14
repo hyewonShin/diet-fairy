@@ -31,6 +31,8 @@ final theme = ThemeData(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
+      // 버튼 사이즈 지정
+      fixedSize: const Size(double.infinity, 60),
       // 기본 버튼색
       backgroundColor: primaryColor,
       // 버튼 그림자
