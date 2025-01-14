@@ -77,6 +77,7 @@ Widget bottomBtn({
         }
       },
       style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.black,
         backgroundColor: Theme.of(context).colorScheme.primary,
         shadowColor: Colors.black,
         elevation: 5, // 그림자 높이
