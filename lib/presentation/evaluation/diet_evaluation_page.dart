@@ -143,7 +143,7 @@ class _DietEvaluationPageState extends ConsumerState<DietEvaluationPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SizedBox(
-          height: 48,
+          height: 60,
           child: ElevatedButton(
             onPressed: selectedMood != null &&
                     selectedDiet != null &&
@@ -161,15 +161,12 @@ class _DietEvaluationPageState extends ConsumerState<DietEvaluationPage> {
                     }
                   }
                 : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-            ),
             child: const Text(
               '완료',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
           ),

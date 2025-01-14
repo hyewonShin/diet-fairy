@@ -136,11 +136,14 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
                       print('Error saving profile changes: $e');
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
+                  child: const Text(
+                    '저장',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                  child: const Text('저장'),
                 ),
               ),
             ),
