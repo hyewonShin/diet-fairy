@@ -28,10 +28,18 @@ final theme = ThemeData(
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        backgroundColor: primaryColor),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      // 기본 버튼색
+      backgroundColor: primaryColor,
+      // 버튼 그림자
+      shadowColor: Colors.black,
+      // 버튼 그림자 높이
+      elevation: 1,
+      // 클릭시 나타나는 색
+      foregroundColor: Colors.black,
+    ),
   ),
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: Colors.transparent,
