@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
+import 'package:diet_fairy/util/image_compressor.dart';
 
 class UserGlobalViewModel extends Notifier<User?> {
   @override
@@ -117,13 +118,17 @@ class UserGlobalViewModel extends Notifier<User?> {
         return;
       }
 
+      // 이미지 압축
+      final compressedFile = await ImageCompressor.compressProfileImage(file);
+      print('Image compressed: ${await compressedFile.length()} bytes');
+
       final storageRef = FirebaseStorage.instance
           .ref()
           .child('profile_images')
           .child('$userId.jpg');
 
-      // 파일 업로드
-      await storageRef.putFile(file);
+      // 압축된 파일 업로드
+      await storageRef.putFile(compressedFile);
       final imageUrl = await storageRef.getDownloadURL();
       print('Image uploaded, URL: $imageUrl');
 

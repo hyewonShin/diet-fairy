@@ -6,6 +6,7 @@ import 'package:diet_fairy/data/dto/feed_dto.dart';
 import 'package:diet_fairy/domain/entity/user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:diet_fairy/util/image_compressor.dart';
 
 class FeedDataSourceImpl implements FeedDataSource {
   FeedDataSourceImpl(this._firestore);
@@ -123,6 +124,26 @@ class FeedDataSourceImpl implements FeedDataSource {
       }
     } catch (e) {
       print('FeedDataSourceImpl deleteFeed error => $e');
+    }
+  }
+
+  Future<String> uploadImage(File file) async {
+    try {
+      // 이미지 압축
+      final compressedFile = await ImageCompressor.compressImage(file);
+      print('Feed image compressed: ${await compressedFile.length()} bytes');
+
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('feed_images')
+          .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+      // 압축된 파일 업로드
+      await ref.putFile(compressedFile);
+      return await ref.getDownloadURL();
+    } catch (e) {
+      print('Error uploading feed image: $e');
+      rethrow;
     }
   }
 }
