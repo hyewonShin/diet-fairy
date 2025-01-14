@@ -1,4 +1,5 @@
 import 'package:diet_fairy/presentation/user_global_view_model.dart';
+import 'package:diet_fairy/presentation/widgets/user_image.dart';
 import 'package:flutter/material.dart';
 import 'package:diet_fairy/domain/entity/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -75,14 +76,12 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
                     backgroundImage: user?.imageUrl?.isNotEmpty == true
                         ? NetworkImage(user!.imageUrl!)
                         : null,
-                    child: user?.imageUrl?.isNotEmpty != true
-                        ? const Icon(Icons.person, size: 50)
-                        : null,
+                    child: UserImage(user!.imageUrl, 100),
                   ),
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: const BoxDecoration(
-                      color: Colors.blue,
+                      color: Colors.grey,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(

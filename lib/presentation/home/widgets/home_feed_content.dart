@@ -1,6 +1,7 @@
 import 'package:diet_fairy/domain/entity/feed.dart';
 import 'package:diet_fairy/presentation/comment/comment_bottom_sheet.dart';
 import 'package:diet_fairy/presentation/providers.dart';
+import 'package:diet_fairy/presentation/widgets/user_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -33,7 +34,7 @@ class HomeFeedContent extends StatelessWidget {
           Row(
             children: [
               // 유저 이미지
-              _userImage(),
+              UserImage(feed.userImageUrl, 50),
 
               const SizedBox(width: 15),
 
@@ -87,26 +88,6 @@ class HomeFeedContent extends StatelessWidget {
           Text(_tagList(feed.tag!)),
         ],
       ),
-    );
-  }
-
-  SizedBox _userImage() {
-    return SizedBox(
-      height: 50,
-      width: 50,
-      child: feed.userImageUrl == null || feed.userImageUrl!.isEmpty
-          ? ClipOval(
-              child: Image.asset(
-                'assets/app/no-user-image.png',
-                fit: BoxFit.cover,
-              ),
-            )
-          : ClipOval(
-              child: Image.network(
-                feed.userImageUrl!,
-                fit: BoxFit.cover,
-              ),
-            ),
     );
   }
 
