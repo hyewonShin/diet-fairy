@@ -113,10 +113,36 @@ class FeedDataSourceImpl implements FeedDataSource {
   @override
   Future<void> deleteFeed(String feedId) async {
     try {
+      // 1. Firestore에서 해당 feedId로 문서를 조회
       final snapshot = await _collection.where('id', isEqualTo: feedId).get();
 
       if (snapshot.docs.isNotEmpty) {
-        await snapshot.docs.first.reference.delete();
+        // 2. 문서 데이터를 가져오기
+        final doc = snapshot.docs.first;
+        final data = doc.data();
+
+        // 3. 문서에 저장된 이미지 URL 리스트 가져오기
+        if (data.containsKey('imageUrl') && data['imageUrl'] is List) {
+          List<String> imageUrls = List<String>.from(data['imageUrl']);
+
+          // 4. 각 URL에 해당하는 Storage 파일 삭제
+          for (var imageUrl in imageUrls) {
+            try {
+              Reference storageRef =
+                  FirebaseStorage.instance.refFromURL(imageUrl);
+              await storageRef.delete();
+              print('✅ Storage file deleted: $imageUrl');
+            } catch (e) {
+              print('❌ Error deleting file from storage: $e');
+              if (e is FirebaseException) {
+                print('Error code: ${e.code}, message: ${e.message}');
+              }
+            }
+          }
+        }
+
+        // 5. Firestore에서 문서 삭제
+        await doc.reference.delete();
         print('Document deleted successfully');
       } else {
         print('No document found with feedId: $feedId');

@@ -24,7 +24,6 @@ class HomeFeedDeleteButton extends ConsumerWidget {
                     CupertinoDialogAction(
                         isDefaultAction: true,
                         onPressed: () async {
-                          print('삭제 완료');
                           await ref
                               .read(homeViewModelProvider.notifier)
                               .deleteFeed(feedId);
