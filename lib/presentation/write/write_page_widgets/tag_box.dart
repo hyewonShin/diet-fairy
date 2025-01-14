@@ -113,7 +113,7 @@ class _ContentsBoxState extends State<TagBox> {
                   setState(() {
                     isError = true;
                   });
-                  return '';
+                  return '태그를 입력하고 스페이스바를 눌러주세요.';
                 }
                 return null;
               },
