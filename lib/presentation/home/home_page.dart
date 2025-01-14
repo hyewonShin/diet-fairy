@@ -11,6 +11,7 @@ import 'package:diet_fairy/util/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:diet_fairy/presentation/home/widgets/report_dialog.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage(User user, {super.key});
@@ -85,14 +86,25 @@ class _HomePageState extends ConsumerState<HomePage> {
                     // 피드 사진
                     HomeFeedImagePageView(feed),
 
-                    // 본인이 작성한 피드에 삭제 버튼 생성
-                    user!.userId == feed.userId
-                        ? Positioned(
-                            top: padding.top,
-                            left: 10,
-                            child: HomeFeedDeleteButton(feedId: feed.id),
-                          )
-                        : const SizedBox.shrink(),
+                    // 본인이 작성한 피드에는 삭제 버튼, 아닌 경우 신고 버튼 생성
+                    Positioned(
+                      top: padding.top,
+                      left: 10,
+                      child: user!.userId == feed.userId
+                          ? HomeFeedDeleteButton(feedId: feed.id)
+                          : IconButton(
+                              icon: const Icon(
+                                Icons.report_outlined,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ReportDialog(feedId: feed.id),
+                                );
+                              },
+                            ),
+                    ),
 
                     // 마이페이지, 글작성 페이지 이동하는 팝업 메뉴
                     Positioned(
